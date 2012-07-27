@@ -1,7 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import "../common" as Common
-import "../common/js/qumoplayer.js" as Qumo
 import "../common/js/subsonic.js" as Subsonic
 import './Components/'
 
@@ -56,7 +55,13 @@ AbstractLoadablePage {
                     radius: 10
                     Row {
                         anchors.fill: parent
-                        ToolIcon { iconId: "toolbar-add"; onClicked: { Qumo.addToPlaylist(searchModel, model.index, currentPlaylistModel); searchoperationitem.visible = false; } }
+                        ToolIcon {
+                            iconId: "toolbar-add"
+                            onClicked: {
+                                currentPlaylistModel.append(searchModel.get(model.index))
+                                searchoperationitem.visible = false;
+                            }
+                        }
                     }
                 }
             }
@@ -136,7 +141,9 @@ AbstractLoadablePage {
             onClicked: {
                 toolBarLayout.closing()
                 currentPlaylistModel.clear()
-                Qumo.addAllSongToPlaylist(searchModel, currentPlaylistModel)
+                for(var i = 0; i < searchModel.count; i++ ) {
+                    currentPlaylistModel.append(searchModel.get(i))
+                }
                 playerPage.playaudio(0, true, 0)
                 pageStack.push(playerPage)
             }
@@ -149,7 +156,9 @@ AbstractLoadablePage {
             opacity: enabled ? 1.0 : 0.5
             onClicked: {
                 toolBarLayout.closing()
-                Qumo.addAllSongToPlaylist(searchModel, currentPlaylistModel)
+                for(var i = 0; i < searchModel.count; i++ ) {
+                    currentPlaylistModel.append(searchModel.get(i))
+                }
                 pageStack.pop()
             }
         }

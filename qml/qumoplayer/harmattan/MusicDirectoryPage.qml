@@ -3,7 +3,6 @@ import com.nokia.meego 1.0
 import QtMultimediaKit 1.1
 import "../common" as Common
 import "../common/js/subsonic.js" as Subsonic
-import "../common/js/qumoplayer.js" as Qumo
 import "./Components/"
 
 AbstractLoadablePage {
@@ -68,7 +67,7 @@ AbstractLoadablePage {
                             iconId: "toolbar-add"
                             onClicked: {
                                 if ( model.isDir === "false") {
-                                    Qumo.addToPlaylist(musicDirectoryModel, model.index, currentPlaylistModel)
+                                    currentPlaylistModel.append(musicDirectoryModel.get(model.index))
                                     musicDirectoryOperationItem.visible = false;
                                 } /*else {
                                     var model = Qt.createComponent("../Common/MusicDirModel.qml" );
@@ -125,7 +124,9 @@ AbstractLoadablePage {
             onClicked: {
                 toolBarLayout.closing()
                 currentPlaylistModel.clear()
-                Qumo.addAllSongToPlaylist(musicDirectoryModel, currentPlaylistModel)
+                for(var i = 0; i < musicDirectoryModel.count; i++ ) {
+                    currentPlaylistModel.append(musicDirectoryModel.get(i))
+                }
                 playerPage.playaudio(0, true, 0)
                 pageStack.push(playerPage)
             }
@@ -138,7 +139,9 @@ AbstractLoadablePage {
             opacity: enabled ? 1.0 : 0.5
             onClicked: {
                 toolBarLayout.closing()
-                Qumo.addAllSongToPlaylist(musicDirectoryModel, currentPlaylistModel)
+                for(var i = 0; i < musicDirectoryModel.count; i++ ) {
+                    currentPlaylistModel.append(musicDirectoryModel.get(i))
+                }
                 pageStack.pop()
             }
         }
