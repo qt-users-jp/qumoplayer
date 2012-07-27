@@ -7,12 +7,6 @@ var api_version = "1.6.0"
 var currentServer
 var widebitrate = "128"
 
-function setServerInfo(server, callback) {
-    //if ( listmodel.get(serverindex).ssl === true ) { var protoheader = "https://"; }
-    //baseurl = protoheader + listmodel.get(serverindex).url + ":" + listmodel.get(serverindex).port
-    currentServer = server
-}
-
 function getserverinfo() {
     console.debug(serverUrl(), currentServer.username, currentServer.password)
 }

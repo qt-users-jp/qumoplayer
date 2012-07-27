@@ -20,7 +20,7 @@ AbstractTabPage {
     Connections {
         target: serverListModel
         onCurrentIndexChanged: {
-            SubSonic.setServerInfo(serverListModel.get(serverListModel.currentIndex))
+            SubSonic.currentServer = serverListModel.get(serverListModel.currentIndex)
             root.load()
         }
     }
