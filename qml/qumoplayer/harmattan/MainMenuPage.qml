@@ -1,7 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.1
-import "../common/js/subsonic.js" as SubSonic
 import "../common" as Common
 import "./Components/"
 
@@ -42,21 +41,8 @@ AbstractTabPage {
                     pageStack.push(serverListPage)
                 }
 
-                Common.PingModel {
-                    id: pingModel
-                    onStatusChanged: {
-                        if (!pingArea.running) return
-                        switch (status) {
-                        case XmlListModel.Ready: {
-                            pingArea.serverAvailable = (pingModel.get(0).reply === "ok")
-                            pingArea.running = false
-                            break }
-                        case XmlListModel.Error: {
-                            pingArea.serverAvailable = false
-                            pingArea.running = false
-                            break }
-                        }
-                    }
+                Common.Ping {
+                    id: ping
                 }
 
                 Connections {
@@ -72,40 +58,29 @@ AbstractTabPage {
                     interval: 10
                     repeat: false
                     running: false
-                    onTriggered: pingArea.ping()
+                    onTriggered: ping.ping()
                 }
 
                 MouseArea {
-                    id: pingArea
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     height: parent.height
                     width: height
 
-                    property bool running: false
-                    property bool serverAvailable: false
-
-                    onClicked: ping()
-
-                    function ping() {
-                        if (pingArea.running) return
-                        pingArea.running = true
-                        pingModel.xml = ''
-                        SubSonic.ping(function(ret) { pingModel.xml = ret })
-                    }
+                    onClicked: ping.ping()
 
                     Image {
                         anchors.centerIn: parent
-                        visible: !pingArea.running
-                        opacity: pingArea.serverAvailable ? 1.0 : 0.5
+                        visible: !ping.running
+                        opacity: ping.pong ? 1.0 : 0.5
                         source: handleIconSource("toolbar-frequent-used")
                     }
 
                     BusyIndicator {
                         anchors.centerIn: parent
                         platformStyle: BusyIndicatorStyle { size: "small" }
-                        visible: running
-                        running: pingArea.running
+                        visible: ping.running
+                        running: ping.running
                     }
                 }
             }
