@@ -71,6 +71,8 @@ PageStackWindow {
     Component { id: playlistPage; PlaylistPage {} }
     Component { id: searchPage; SearchPage {} }
     Component { id: serverListPage; ServerListPage {} }
+    Component { id: preferencesPage; PreferencesPage {} }
+    Component { id: aboutPage; AboutPage {} }
 
     Component.onCompleted: {
         console.log("Loaded")

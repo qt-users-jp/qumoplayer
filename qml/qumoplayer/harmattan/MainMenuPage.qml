@@ -117,8 +117,10 @@ AbstractTabPage {
 
             AbstractOneLineDelegate {
                 width: parent.width
+                icon: handleIconSource("toolbar-settings")
                 title: qsTr("Preferences")
-                enabled: false
+                enabled: true
+                onClicked: pageStack.push(preferencesPage)
             }
         }
     }

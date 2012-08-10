@@ -5,6 +5,7 @@ AbstractDelegate {
 
     property alias title: title.text
     property alias detail: detail.text
+    property bool linkActivation: false
 
     Column {
         anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: root.height; right: parent.right }
@@ -14,6 +15,9 @@ AbstractDelegate {
             font.family: "Nokia Pure Text"
             color: "white"
             elide: Text.ElideRight
+            onLinkActivated: {
+                if(root.linkActivation) { Qt.openUrlExternally(link) }
+            }
         }
 
         Text {
@@ -22,6 +26,9 @@ AbstractDelegate {
             font.family: "Nokia Pure Text"
             color: "lightgrey"
             elide: Text.ElideRight
+            onLinkActivated: {
+                if(root.linkActivation) { Qt.openUrlExternally(link) }
+            }
         }
     }
 
