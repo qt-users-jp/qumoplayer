@@ -1,9 +1,14 @@
 import QtQuick 1.1
+import './js/subsonic.js' as Subsonic
 
-XmlListModel {
+AbstractSubsonicListModel {
+    id: root
     query: "/subsonic-response/playlists/playlist"
-    namespaceDeclarations: "declare default element namespace 'http://subsonic.org/restapi';"
 
     XmlRole { name: "id"; query: "@id/string()" }
     XmlRole { name: "name"; query: "@name/string()" }
+
+    function loadImpl(callback) {
+        Subsonic.getPlayLists(callback)
+    }
 }

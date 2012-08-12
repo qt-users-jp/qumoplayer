@@ -4,6 +4,7 @@ import com.nokia.meego 1.0
 import me.qtquick.qumoplayer 1.0 as QumoPlayer
 import "../common" as Common
 import "./Components/"
+import "../common/js/subsonic.js" as Subsonic
 
 PageStackWindow {
     id: rootWindow
@@ -58,6 +59,7 @@ PageStackWindow {
     Connections {
         target: serverListModel
         onCurrentIndexChanged: {
+            Subsonic.currentServer = serverListModel.get(serverListModel.currentIndex)
             globalSettings.saveData('Server/CurrentIndex', serverListModel.currentIndex)
         }
     }

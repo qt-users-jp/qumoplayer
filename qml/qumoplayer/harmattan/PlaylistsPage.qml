@@ -1,6 +1,5 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "../common/js/subsonic.js" as Subsonic
 import "../common" as Common
 import "./Components/"
 
@@ -8,10 +7,6 @@ AbstractTabLoadablePage {
     id: root
     title: qsTr('Playlists')
     model: playlistsModel
-
-    function loadData(callback) {
-        Subsonic.getPlayLists(callback)
-    }
 
     Common.PlaylistsModel {
         id: playlistsModel

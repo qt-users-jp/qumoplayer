@@ -1,9 +1,14 @@
 import QtQuick 1.1
+import './js/subsonic.js' as Subsonic
 
-XmlListModel {
+AbstractSubsonicListModel {
+    id: root
     query: "/subsonic-response/indexes/index/artist"
-    namespaceDeclarations: "declare default element namespace 'http://subsonic.org/restapi';"
 
-    XmlRole { name: "name"; query: "@name/string()" }
     XmlRole { name: "id"; query: "@id/string()" }
+    XmlRole { name: "name"; query: "@name/string()" }
+
+    function loadImpl(callback) {
+        Subsonic.getIndexes(callback)
+    }
 }

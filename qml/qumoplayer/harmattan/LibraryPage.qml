@@ -1,7 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.1
-import "../common/js/subsonic.js" as SubSonic
 import "../common" as Common
 import "./Components/"
 
@@ -9,10 +8,6 @@ AbstractTabLoadablePage {
     id: root
     title: qsTr('Music Library')
     model: libraryModel
-
-    function loadData(callback) {
-        SubSonic.getIndexes(callback)
-    }
 
     Common.LibraryModel {
         id: libraryModel
