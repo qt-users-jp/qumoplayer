@@ -8,13 +8,9 @@ AbstractLoadablePage {
     id: root
     model: searchModel
 
-    function loadData(callback) {
-        Subsonic.search2(root.title, callback)
-    }
-
-    Common.MusicDirectoryModel {
+    Common.SearchModel {
         id: searchModel
-        query: "/subsonic-response/searchResult2/*"
+        q: root.title
     }
 
     onTitleChanged: {

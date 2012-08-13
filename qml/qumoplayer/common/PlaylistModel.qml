@@ -3,11 +3,11 @@ import './js/subsonic.js' as Subsonic
 
 AbstractMusicDirectoryModel {
     id: root
-    query: "/subsonic-response/directory/child"
+    query: "/subsonic-response/playlist/entry"
 
     property string _id
 
     function loadImpl(callback) {
-        Subsonic.getMusicDirectory(root._id, callback)
+        Subsonic.getPlayList(root._id, callback)
     }
 }

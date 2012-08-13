@@ -9,15 +9,10 @@ AbstractLoadablePage {
     id: root
     model: musicDirectoryModel
 
-    property string _id: "aaa"
-
-    function loadData(callback) {
-        Subsonic.getMusicDirectory(_id, callback)
-    }
+    property alias _id: musicDirectoryModel._id
 
     Common.MusicDirectoryModel {
         id: musicDirectoryModel
-        query: "/subsonic-response/directory/child"
     }
 
     Component {

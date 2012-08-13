@@ -8,15 +8,10 @@ import "./Components/"
 AbstractLoadablePage {
     id: root
     model: playlistModel
-    property string plid: "aaa"
+    property alias _id: playlistModel._id
 
-    function loadData(callback) {
-        Subsonic.getOnePlayList(plid, callback)
-    }
-
-    Common.MusicDirectoryModel {
+    Common.PlaylistModel {
         id: playlistModel
-        query: "/subsonic-response/playlist/entry"
     }
 
     Component {

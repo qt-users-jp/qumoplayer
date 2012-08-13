@@ -80,9 +80,8 @@ function getIndexes(callback) {
     createXMLHttpRequest('GET', url, callback);
 }
 
-function getMusicDirectory(dirid, callback) {
-    var url = serverUrl().concat("getMusicDirectory.view").concat(generateParameters({id: dirid}))
-    console.debug(url)
+function getMusicDirectory(id, callback) {
+    var url = serverUrl().concat("getMusicDirectory.view").concat(generateParameters({id: id}))
     createXMLHttpRequest('GET', url, callback);
 }
 
@@ -91,8 +90,8 @@ function getPlayLists(callback) {
     createXMLHttpRequest('GET', url, callback);
 }
 
-function getOnePlayList(plid, callback) {
-    var url = serverUrl().concat("getPlaylist.view").concat(generateParameters({id: plid}))
+function getPlayList(id, callback) {
+    var url = serverUrl().concat("getPlaylist.view").concat(generateParameters({id: id}))
     createXMLHttpRequest('GET', url, callback);
 }
 

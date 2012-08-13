@@ -3,11 +3,11 @@ import './js/subsonic.js' as Subsonic
 
 AbstractMusicDirectoryModel {
     id: root
-    query: "/subsonic-response/directory/child"
+    query: "/subsonic-response/searchResult2/*"
 
-    property string _id
+    property string q
 
     function loadImpl(callback) {
-        Subsonic.getMusicDirectory(root._id, callback)
+        Subsonic.search2(root.q, callback)
     }
 }

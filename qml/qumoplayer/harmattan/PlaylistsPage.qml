@@ -21,7 +21,7 @@ AbstractTabLoadablePage {
             title: model.name
 
             onClicked: {
-                pageStack.push(playlistPage, { plid: model.id, title: name } );
+                pageStack.push(playlistPage, { _id: model.id, title: name } );
             }
         }
     }

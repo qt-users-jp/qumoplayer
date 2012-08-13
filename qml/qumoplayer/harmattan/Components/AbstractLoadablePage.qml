@@ -7,19 +7,22 @@ AbstractPage {
     property XmlListModel model
 
     loadable: root.status === PageStatus.Active
-    loading: root.__loading || root.model.status === XmlListModel.Loading
-    property bool __loading: false
+    loading: root.model.loading || delayedLoad.running
 
-    function load() {
-        root.__loading = true
-        loadData(function(ret) { root.model.xml = ret; root.__loading = false })
-    }
-    function loadData(callback) {callback("")}
+    function load() {delayedLoad.start()}
 
-    onStatusChanged: {
-        if ( status === PageStatus.Active && root.model.xml === "" ) {
-            root.load()
-        }
+    Connections {
+        target: serverListModel
+        onCurrentIndexChanged: delayedLoad.start()
     }
+
+    Timer {
+        id: delayedLoad
+        repeat: false
+        interval: 10
+        onTriggered: root.model.load()
+    }
+
+    onModelChanged: delayedLoad.start()
 }
 
