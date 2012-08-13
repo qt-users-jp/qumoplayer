@@ -13,7 +13,8 @@ Rectangle {
     gradient: Gradient {
         id: grad
         GradientStop { position: 0.0; color: "darkorange" }
-        GradientStop { position: 0.5; color: "black" }
+//        GradientStop { position: 0.33; color: "lightgray" }
+//        GradientStop { position: 0.67; color: "lightgray" }
         GradientStop { position: 1.0; color: "darkorange" }
     }
 
@@ -28,6 +29,7 @@ Rectangle {
         anchors.rightMargin: 15
         font.pointSize: 25
         font.family: "Nokia Pure Text"
+        font.bold: true
         color: "white"
         elide: Text.ElideRight
     }
@@ -35,7 +37,7 @@ Rectangle {
     ToolIcon {
         id: load
         anchors { right: parent.right; verticalCenter: parent.verticalCenter }
-        iconId: "toolbar-refresh"
+        iconId: "icon-m-toolbar-refresh-selected"
         onClicked: root.load()
         visible: opacity > 0
         opacity: 0
