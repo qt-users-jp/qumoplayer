@@ -24,8 +24,22 @@ AbstractPage {
                 pageStack.pop()
             }
 
-            onPressAndHold: {
-                pageStack.push(serverSettingsPage, {server: serverListModel.get(model.index)})
+            MouseArea {
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                height: parent.height
+                width: height
+
+                onClicked: {
+                    pageStack.push(serverSettingsPage, {server: serverListModel.get(model.index)})
+                }
+
+                Image {
+                    anchors.centerIn: parent
+                    fillMode: Image.PreserveAspectFit
+                    smooth: true
+                    source: handleIconSource('toolbar-edit')
+                }
             }
         }
 
