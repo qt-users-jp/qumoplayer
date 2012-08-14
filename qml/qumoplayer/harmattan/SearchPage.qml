@@ -22,61 +22,69 @@ AbstractLoadablePage {
             id: searchDelItem
             width: ListView.view.width
 
+            title: model.type
+
             onClicked: {
-                if(model.type !== "song") {
-                    searchView.currentIndex = -1;
+                if (model.type !== "song") {
                     pageStack.push(musicDirectoryPage, { _id: model.id, title: model.title } );
-                    stackOnTop(pageStack);
-                } else {
-                    if(index !== searchView.currentIndex) {
-                        searchView.currentIndex = index;
-                    } else {
-                        searchoperationitem.visible = !searchoperationitem.visible
-                    }
                 }
             }
 
-            Item {
-                id: searchoperationitem
+            OperationArea {
+                id: operationArea
                 height: parent.height
-                width: parent.width
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
                 visible: false
-                Rectangle {
-                    id: searchoperationrect
-                    anchors { right: parent.right}
-                    height: parent.height; width: 150
-                    color: "darkorange"
-                    opacity: 0.6
-                    radius: 10
-                    Row {
-                        anchors.fill: parent
-                        ToolIcon {
-                            iconId: "toolbar-add"
-                            onClicked: {
-                                currentPlaylistModel.append(searchModel.get(model.index))
-                                searchoperationitem.visible = false;
-                            }
+
+                added: currentPlaylistModel.ids.indexOf(model.id) > -1
+                onAdd: {
+                    currentPlaylistModel.append(searchModel.get(model.index))
+                }
+                onRemove: {
+                    for (var i = 0; i < currentPlaylistModel.count; i++) {
+                        if (currentPlaylistModel.get(i).id === model.id) {
+                            currentPlaylistModel.remove(i)
+                            break
                         }
                     }
                 }
             }
-            states: State {
-                when: searchDelItem.ListView.isCurrentItem
-                PropertyChanges {
-                    target: searchoperationitem
-                    visible: true
-                }
-            }
 
-            Component.onCompleted: {
-                if(model.type === "artist" ) {
-                    searchDelItem.icon = handleIconSource("toolbar-contact");
-                    searchDelItem.title = model.name;
-                } else {
-                    searchDelItem.icon = searchModel.getCoverArt(model.coverArt, searchDelItem.height);
-                    searchDelItem.title = model.title;
+            states: [
+                State {
+                    when: model.type === 'song'
+                    PropertyChanges {
+                        target: operationArea
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: searchDelItem
+                        rightMargin: operationArea.width
+                        icon: searchModel.getCoverArt(model.coverArt, searchDelItem.height);
+                        title: model.title
+                        detail: model.artist
+                    }
+                },
+                State {
+                    when: model.type === 'album'
+                    PropertyChanges {
+                        target: searchDelItem
+                        icon: searchModel.getCoverArt(model.coverArt, searchDelItem.height);
+                        title: model.title
+                        detail: model.artist
+                    }
+                },
+                State {
+                    when: model.type === 'artist'
+                    PropertyChanges {
+                        target: searchDelItem
+                        icon: handleIconSource("toolbar-contact")
+                        title: model.name
+                        detail: ' '
+                    }
                 }
-            }
+            ]
         }
     }
 

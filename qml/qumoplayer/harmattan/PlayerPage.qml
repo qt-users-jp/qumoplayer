@@ -220,41 +220,36 @@ AbstractPage {
         Component {
             id: currentPlaylistDelegate
             AbstractTwoLinesDelegate {
-                id: currentPlaylistDelegateItem
                 width: ListView.view.width
-                icon: { Subsonic.getCoverArt(model.coverArt, 300)}
+                icon: Subsonic.getCoverArt(model.coverArt, 300)
+                rightMargin: operationArea.width
+
                 title: model.title
                 detail: model.artist
-                onClicked: {
-                    if(model.index !== currentPlaylistView.currentIndex) {
-                        currentPlaylistView.currentIndex = model.index;
-                        //ListView.currentIndexChanged()
-                    } else {
-                        operationRect.visible = !operationRect.visible
-                    }
-                }
-                Rectangle {
-                    id: operationRect
-                    anchors { right: parent.right}
-                    height: parent.height; width: 150
-                    color: "darkorange"
-                    opacity: 0.6
-                    visible: false
 
-                    Row {
-                        anchors.fill: parent
-                        ToolIcon { iconId: "toolbar-mediacontrol-play"; onClicked: { playaudio(currentPlaylistView.currentIndex, true, 0); operationRect.visible = false; } }
-                        ToolIcon { iconId: "toolbar-delete"; onClicked: currentPlaylistModel.remove(currentPlaylistView.currentIndex) }
+                onClicked: {
+                    playaudio(model.index, true, 0)
+                    flipable.flipped = !flipable.flipped
+                }
+
+                OperationArea {
+                    id: operationArea
+                    height: parent.height
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+
+                    added: currentPlaylistModel.ids.indexOf(model.id) > -1
+                    onAdd: {
+                        currentPlaylistModel.append(musicDirectoryModel.get(model.index))
                     }
-                    states: [
-                        State {
-                            when: currentPlaylistDelegateItem.ListView.isCurrentItem
-                            PropertyChanges {
-                                target: operationRect
-                                visible: true
+                    onRemove: {
+                        for (var i = 0; i < currentPlaylistModel.count; i++) {
+                            if (currentPlaylistModel.get(i).id === model.id) {
+                                currentPlaylistModel.remove(i)
+                                break
                             }
                         }
-                    ]
+                    }
                 }
             }
         }

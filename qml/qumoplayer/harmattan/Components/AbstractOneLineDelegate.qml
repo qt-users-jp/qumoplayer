@@ -7,7 +7,7 @@ AbstractDelegate {
 
     Text {
         id: title
-        anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: root.height; right: parent.right }
+        anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: root.height; right: parent.right; rightMargin: root.rightMargin }
         font.pointSize: 25
         font.family: "Nokia Pure Text"
         color: "white"

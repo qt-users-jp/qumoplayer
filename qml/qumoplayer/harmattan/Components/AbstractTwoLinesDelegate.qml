@@ -8,9 +8,10 @@ AbstractDelegate {
     property bool linkActivation: false
 
     Column {
-        anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: root.height; right: parent.right }
+        anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: root.height; right: parent.right; rightMargin: root.rightMargin }
         Text {
             id: title
+            width: parent.width
             font.pointSize: detail.text.length === 0 ? 25 : 18
             font.family: "Nokia Pure Text"
             color: "white"
@@ -22,6 +23,7 @@ AbstractDelegate {
 
         Text {
             id: detail
+            width: parent.width
             font.pointSize: 14
             font.family: "Nokia Pure Text"
             color: "lightgrey"

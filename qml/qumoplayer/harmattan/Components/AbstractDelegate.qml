@@ -6,6 +6,7 @@ MouseArea {
     height: 70
 
     property alias icon: icon.source
+    property int rightMargin: 0
 
     Image {
         id: icon

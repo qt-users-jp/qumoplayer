@@ -18,50 +18,30 @@ AbstractLoadablePage {
         AbstractTwoLinesDelegate {
             id: playlistDelgateItem
             width: ListView.view.width
+            rightMargin: operationArea.width
 
             icon: playlistModel.getCoverArt(model.coverArt, 300)
 
             title: model.title
             detail: model.artist
 
-            //onClicked: { playsong.songid = musicid; songdialogtext.text = musictitle; songdialogimg.source = plsongalbumimg.source; songdialog.open(); }
-            onClicked: {
-                if(index !== playlistView.currentIndex) {
-                    playlistView.currentIndex = index;
-                } else {
-                    playlistOperationItem.visible = !playlistOperationItem.visible
-                }
-            }
-            onPressAndHold: { playlistView.currentIndex = index; onplmenu.open(); }
-
-            Item {
-                id: playlistOperationItem
+            OperationArea {
+                id: operationArea
                 height: parent.height
-                width: parent.width
-                visible: false
-                Rectangle {
-                    anchors { right: parent.right}
-                    height: parent.height; width: 150
-                    color: "darkorange"
-                    opacity: 0.6
-                    radius: 10
-                    Row {
-                        anchors.fill: parent
-                        ToolIcon {
-                            iconId: "toolbar-add"
-                            onClicked: {
-                                currentPlaylistModel.append(playlistModel.get(model.index))
-                                playlistDelgateItem.ListView.currentIndex = -1
-                            }
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+
+                added: currentPlaylistModel.ids.indexOf(model.id) > -1
+                onAdd: {
+                    currentPlaylistModel.append(playlistModel.get(model.index))
+                }
+                onRemove: {
+                    for (var i = 0; i < currentPlaylistModel.count; i++) {
+                        if (currentPlaylistModel.get(i).id === model.id) {
+                            currentPlaylistModel.remove(i)
+                            break
                         }
                     }
-                }
-            }
-            states: State {
-                when: playlistDelgateItem.ListView.isCurrentItem
-                PropertyChanges {
-                    target: playlistOperationItem
-                    visible: true
                 }
             }
         }
