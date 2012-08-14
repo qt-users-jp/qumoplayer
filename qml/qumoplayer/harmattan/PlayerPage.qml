@@ -63,7 +63,7 @@ AbstractPage {
                     height: 300
                     Image {
                         id: playerimg
-                        //source: Subsonic.getCoverArtUrl(currentplaylistmodel.get(currentindex).coverartid, 300);
+                        //source: Subsonic.getCoverArt(currentplaylistmodel.get(currentindex).coverartid, 300);
                         anchors.fill: parent
                         sourceSize.width: 300
                         sourceSize.height: 300
@@ -222,7 +222,7 @@ AbstractPage {
             AbstractTwoLinesDelegate {
                 id: currentPlaylistDelegateItem
                 width: ListView.view.width
-                icon: { Subsonic.getCoverArtUrl(model.coverArt, 300)}
+                icon: { Subsonic.getCoverArt(model.coverArt, 300)}
                 title: model.title
                 detail: model.artist
                 onClicked: {
@@ -340,7 +340,7 @@ AbstractPage {
     function playaudio(index, play, offset) {
         //player.pause();
         currentindex = index;
-        playerimg.source = Subsonic.getCoverArtUrl(currentPlaylistModel.get(currentindex).coverArt, 300);
+        playerimg.source = Subsonic.getCoverArt(currentPlaylistModel.get(currentindex).coverArt, 300);
         console.debug(playerimg.source);
         player.source = Subsonic.getStreamSongUrl(currentPlaylistModel.get(currentindex).id, "128", "mp3", offset);
         console.debug(player.source);

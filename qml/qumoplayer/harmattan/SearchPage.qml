@@ -1,7 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import "../common" as Common
-import "../common/js/subsonic.js" as Subsonic
 import './Components/'
 
 AbstractLoadablePage {
@@ -74,7 +73,7 @@ AbstractLoadablePage {
                     searchDelItem.icon = handleIconSource("toolbar-contact");
                     searchDelItem.title = model.name;
                 } else {
-                    searchDelItem.icon = Subsonic.getCoverArtUrl(model.coverArt, searchDelItem.height);
+                    searchDelItem.icon = searchModel.getCoverArt(model.coverArt, searchDelItem.height);
                     searchDelItem.title = model.title;
                 }
             }

@@ -95,10 +95,9 @@ function getPlayList(id, callback) {
     createXMLHttpRequest('GET', url, callback);
 }
 
-function getCoverArtUrl(coverartid, size) {
+function getCoverArt(coverartid, size) {
     var encpass = toHex(currentServer.password)
     var url = serverUrl().concat("getCoverArt.view").concat(generateParameters({u: currentServer.username, p: "enc:".concat(encpass), id: coverartid, size: size}))
-    console.debug(url);
     return url;
 }
 

@@ -2,7 +2,6 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import QtMultimediaKit 1.1
 import "../common" as Common
-import "../common/js/subsonic.js" as Subsonic
 import "./Components/"
 
 AbstractLoadablePage {
@@ -21,7 +20,7 @@ AbstractLoadablePage {
             id: musicDirectoryDelItem
             width: ListView.view.width
 
-            icon: Subsonic.getCoverArtUrl(model.coverArt, 300)
+            icon: musicDirectoryModel.getCoverArt(model.coverArt, 300)
             title: model.title
             detail: model.artist
 

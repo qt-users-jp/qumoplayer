@@ -1,4 +1,5 @@
 import QtQuick 1.1
+import './js/subsonic.js' as Subsonic
 
 XmlListModel {
     id: root
@@ -18,4 +19,8 @@ XmlListModel {
     }
 
     function loadImpl(callback) {callback('<error message="not implemented in subclass" />')}
+
+    function getCoverArt(coverArt, size) {
+        return Subsonic.getCoverArt(coverArt, size)
+    }
 }
