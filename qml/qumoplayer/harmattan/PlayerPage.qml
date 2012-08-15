@@ -21,6 +21,7 @@ AbstractPage {
         anchors.fill: parent
         anchors.topMargin: root.headerHeight
         anchors.bottomMargin: root.footerHeight
+        z: -1
 
         property bool flipped: false
 
