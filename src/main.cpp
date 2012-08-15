@@ -2,6 +2,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QTimer>
+#include <QtOpenGL/QGLWidget>
 #include <QtDeclarative/QDeclarativeError>
 #include <QtDeclarative/qdeclarative.h>
 #include "qmlapplicationviewer.h"
@@ -55,6 +56,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     qmlRegisterType<QumoPlayerTest>("me.qtquick.qumoplayer", 1, 0, "Test");
     viewer.setMainQmlFile(mainFile);
+    viewer.setAttribute(Qt::WA_OpaquePaintEvent);
+    viewer.setAttribute(Qt::WA_NoSystemBackground);
+    viewer.viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    viewer.viewport()->setAttribute(Qt::WA_NoSystemBackground);
+    viewer.setViewport(new QGLWidget);
 
     if (viewer.status() == QDeclarativeView::Error) {
         qWarning() << viewer.errors();

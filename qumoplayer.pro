@@ -28,6 +28,7 @@ CONFIG += qdeclarative-boostable
 
 # Add dependency to Symbian components
 CONFIG += qt-components
+QT += opengl
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += src/main.cpp
