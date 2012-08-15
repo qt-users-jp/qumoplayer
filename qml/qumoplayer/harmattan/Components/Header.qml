@@ -3,20 +3,13 @@ import com.nokia.meego 1.0
 
 Rectangle {
     id: root
-    width: 100
-    height: 70
+    width: 480
+    height: 72
+    color: 'darkorange'
 
     property bool loadable: false
     property bool loading: false
     signal load()
-
-    gradient: Gradient {
-        id: grad
-        GradientStop { position: 0.0; color: "darkorange" }
-//        GradientStop { position: 0.33; color: "lightgray" }
-//        GradientStop { position: 0.67; color: "lightgray" }
-        GradientStop { position: 1.0; color: "darkorange" }
-    }
 
     property alias title: title.text
 
@@ -46,7 +39,7 @@ Rectangle {
     BusyIndicator {
         id: busyIndicator
         anchors.centerIn: load
-        platformStyle: BusyIndicatorStyle { size: "medium" }
+        platformStyle: BusyIndicatorStyle { id: busyIndicatorStyle }
         visible: opacity > 0
         opacity: 0
         running: visible
@@ -69,6 +62,19 @@ Rectangle {
                     target: load
                     opacity: 1
                 }
+            }
+        ]
+    }
+
+    StateGroup {
+        states: [
+            State {
+                name: 'landscape'
+                when: !rootWindow.inPortrait
+                PropertyChanges { target: root; height: 48 }
+                PropertyChanges { target: title; font.pointSize: 16 }
+                PropertyChanges { target: busyIndicatorStyle; size: 'small' }
+                PropertyChanges { target: load; scale: 0.75; anchors.rightMargin: -15 }
             }
         ]
     }

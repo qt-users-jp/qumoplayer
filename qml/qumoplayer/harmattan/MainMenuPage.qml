@@ -11,6 +11,7 @@ AbstractTabPage {
     Flickable {
         id: flickable
         anchors.fill: parent
+        anchors.bottomMargin: root.footerHeight
         clip: true
 
         contentWidth: container.width

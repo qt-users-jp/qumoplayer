@@ -9,6 +9,7 @@ import "../common/js/subsonic.js" as Subsonic
 PageStackWindow {
     id: rootWindow
     initialPage: mainPage
+    showStatusBar: rootWindow.inPortrait
 
     Settings {
         id: globalSettings
@@ -76,8 +77,5 @@ PageStackWindow {
     Component { id: preferencesPage; PreferencesPage {} }
     Component { id: aboutPage; AboutPage {} }
 
-    Component.onCompleted: {
-        console.log("Loaded")
-        theme.inverted = true
-    }
+    Binding { target: theme; property: 'inverted'; value: true }
 }
