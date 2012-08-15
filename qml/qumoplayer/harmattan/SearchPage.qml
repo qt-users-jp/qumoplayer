@@ -90,21 +90,9 @@ AbstractLoadablePage {
 
     Component {
         id: searchSectionDelegate
-        Rectangle {
+        AbstractSectionDelegate {
             width: searchView.width
-            height: 40
-            gradient: Gradient {
-                id: grad
-                GradientStop { position: 0.0; color: "black" }
-                GradientStop { position: 1.0; color: "darkorange" }
-            }
-            Text {
-                anchors { left: parent.left; verticalCenter: parent.verticalCenter; leftMargin: 15 }
-                text: section
-                font.pointSize: 20
-                color: "white"
-                font.capitalization: Font.Capitalize
-            }
+            title: section
         }
     }
 
@@ -118,7 +106,7 @@ AbstractLoadablePage {
         delegate: searchDelegate
         clip: true
         loading: root.loading
-        section.property: "model.type"
+        section.property: "type"
         section.criteria: ViewSection.FullString
         section.delegate: searchSectionDelegate
         Component.onCompleted: currentIndex = -1;
