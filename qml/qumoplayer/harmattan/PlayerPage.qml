@@ -40,7 +40,11 @@ AbstractPage {
         }
 
         transitions: Transition {
-            NumberAnimation { target: rotation; property: "angle"; duration: 400; easing.type: Easing.InOutQuad }
+            SequentialAnimation {
+                NumberAnimation { target: flipable; property: "scale"; to: 0.75; duration: 250; easing.type: Easing.InOutQuad }
+                NumberAnimation { target: flipable; property: "scale"; to: 1.0; duration: 250; easing.type: Easing.InOutQuad }
+            }
+            NumberAnimation { target: rotation; property: "angle"; duration: 500; easing.type: Easing.InOutQuad }
         }
 
         Item {
