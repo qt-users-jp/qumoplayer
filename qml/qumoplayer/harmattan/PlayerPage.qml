@@ -16,7 +16,7 @@ AbstractPage {
 
     Flipable {
         id: flipable
-        front: flipplayer
+        front: playerFace
         back: currentPlaylistView
         anchors.fill: parent
         anchors.topMargin: root.headerHeight
@@ -47,79 +47,92 @@ AbstractPage {
             NumberAnimation { target: rotation; property: "angle"; duration: 500; easing.type: Easing.InOutQuad }
         }
 
-        Item {
-            id: flipplayer
-            anchors.fill: parent
+        Grid {
+            id: playerFace
+            anchors.centerIn: parent
+            columns: 1
 
-            Item {
-                anchors.top: parent.top
-                //anchors.topMargin: playerheader.height
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                //anchors.fill: parent
-                //color: "black"
-                Item {
-                    id: imgitem
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top : parent.top
-                    anchors.topMargin: 50
-                    width: 300
-                    height: 300
-                    Image {
-                        id: playerimg
-                        //source: Subsonic.getCoverArt(currentplaylistmodel.get(currentindex).coverartid, 300);
-                        anchors.fill: parent
-                        sourceSize.width: 300
-                        sourceSize.height: 300
+            move: Transition {
+                NumberAnimation {
+                    properties: "x,y"
+                    easing.type: Easing.OutBounce
+                }
+            }
+
+            states: [
+                State {
+                    name: 'landscape'
+                    when: !rootWindow.inPortrait
+                    PropertyChanges {
+                        target: playerFace
+                        columns: 2
+                    }
+                    PropertyChanges {
+                        target: upper
+                        width: 300
+                        height: 300
+                    }
+                    PropertyChanges {
+                        target: lower
+                        width: 400
+                        height: 300
                     }
                 }
+            ]
 
+            Item {
+                id: upper
+                width: 480
+                height: 400
+                Image {
+                    id: playerimg
+                    anchors.centerIn: parent
+                    width: 300
+                    height: 300
+                    fillMode: Image.PreserveAspectFit
+                    smooth: true
+                }
+            }
+
+            Item {
+                id: lower
+                width: 480
+                height: 250
                 Column {
-                    id: songinfocolumn
-                    anchors.top: imgitem.bottom
-                    anchors.topMargin: 30
-                    anchors.horizontalCenter:  parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: 400
+                    spacing: 10
                     Text {
                         id: songtitletext
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        //text: currentplaylistmodel.get(currentindex).songtitle
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
                         color: "white"
                         font.pointSize: 25
                     }
                     Text {
                         id: artisttext
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        //text: currentplaylistmodel.get(currentindex).artist
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
                         color: "white"
                         font.pointSize: 15
                     }
-                }
 
-                ProgressBar {
-                    anchors.top: songinfocolumn.bottom
-                    anchors.topMargin: 20
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    id: pgbar
-                    width: 350
-                    //maximumValue: player.duration
-                    maximumValue: root.currentindex < currentPlaylistModel.count - 1 ? 0 : currentPlaylistModel.get(root.currentindex).duration * 1000
-                    minimumValue: 0
-                    value: player.position
-                    visible: true
-                }
-
-                Item {
-                    id: controlrect
-                    anchors.top: pgbar.bottom
-                    anchors.topMargin: 20
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    ProgressBar {
+                        id: pgbar
+                        width: parent.width * 0.75
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        minimumValue: 0
+                        maximumValue: root.currentindex < currentPlaylistModel.count - 1 ? 0 : currentPlaylistModel.get(root.currentindex).duration * 1000
+                        value: player.position
+                    }
 
                     Rectangle {
                         id: listcontrolrect
                         color: "black"
                         height: 60; width: 200
-                        anchors.top: parent.top
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         Row {
@@ -164,12 +177,10 @@ AbstractPage {
                             }
                         }
                     }
-
                     Rectangle {
                         id: mediacontrolrect
                         color: "black"
                         height: 60; width: 200
-                        anchors.top: listcontrolrect.bottom
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         Row {
