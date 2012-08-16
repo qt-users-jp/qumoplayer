@@ -21,6 +21,7 @@ AbstractPage {
             id: container
             width: flickable.width
             anchors.top: parent.top
+            anchors.topMargin: 30
 
             Column {
                 width: parent.width
@@ -29,8 +30,6 @@ AbstractPage {
 
                 Image {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: 30
                     height: 128
                     width: height
                     fillMode: Image.PreserveAspectFit
