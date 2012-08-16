@@ -351,15 +351,17 @@ AbstractPage {
     function playaudio(index, play, offset) {
         //player.pause();
         currentindex = index;
-        playerimg.source = Subsonic.getCoverArt(currentPlaylistModel.get(currentindex).coverArt, 300);
-        console.debug(playerimg.source);
-        player.source = Subsonic.getStreamSongUrl(currentPlaylistModel.get(currentindex).id, "128", "mp3", offset);
-        console.debug(player.source);
-        songtitletext.text = currentPlaylistModel.get(currentindex).title;
-        artisttext.text = currentPlaylistModel.get(currentindex).artist;
-        pgbar.maximumValue = currentPlaylistModel.get(currentindex).duration * 1000;
-        console.debug(songtitletext.text + artisttext.text + pgbar.maximumValue );
-        if (play) { player.play(); }
+        if (index > -1) {
+            playerimg.source = Subsonic.getCoverArt(currentPlaylistModel.get(currentindex).coverArt, 300);
+            console.debug(playerimg.source);
+            player.source = Subsonic.getStreamSongUrl(currentPlaylistModel.get(currentindex).id, "128", "mp3", offset);
+            console.debug(player.source);
+            songtitletext.text = currentPlaylistModel.get(currentindex).title;
+            artisttext.text = currentPlaylistModel.get(currentindex).artist;
+            pgbar.maximumValue = currentPlaylistModel.get(currentindex).duration * 1000;
+            console.debug(songtitletext.text + artisttext.text + pgbar.maximumValue );
+            if (play) { player.play(); }
+        }
     }
 
     function removeFromPlaylist(string) {
@@ -384,70 +386,74 @@ AbstractPage {
     toolBarLayout: AbstractToolBarLayout {
         id: prefbarlayout
 
-        Flipable {
-            id: flipablemini
-            front: currentlistimg
-            back: currentsongimg
-            width: 50; height: 50
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
+        MouseArea {
+            width: 80
+            height: 64
+            onClicked: flipable.flipped = !flipable.flipped
 
-            transform: Rotation {
-                id: rotationmini
-                origin.x: flipablemini.width/2
-                origin.y: flipablemini.height/2
-                axis.x: 0; axis.y: 1; axis.z:0;
-                angle: 0
-            }
-
-            states: State {
-                name: "backmini"
-                PropertyChanges { target: rotationmini; angle: 180 }
-                when: flipable.flipped
-            }
-
-            transitions: Transition {
-                NumberAnimation { target: rotationmini; property: "angle"; duration: 400; easing.type: Easing.InOutQuad }
-            }
-
-            Image {
-                id: currentsongimg
+            Flipable {
+                id: flipablemini
+                front: currentlistimg
+                back: currentsongimg
+                width: 50; height: 50
                 anchors.centerIn: parent
-                source: playerimg.source
-                sourceSize.width: parent.width; sourceSize.height: parent.height
-            }
-            ToolIcon {
-                id: currentlistimg
-                anchors.centerIn: parent
-                iconId: "toolbar-list"
-            }
+//                anchors.verticalCenter: parent.verticalCenter
+//                anchors.horizontalCenter: parent.horizontalCenter
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: { flipable.flipped = !flipable.flipped;}
+                transform: Rotation {
+                    id: rotationmini
+                    origin.x: flipablemini.width/2
+                    origin.y: flipablemini.height/2
+                    axis.x: 0; axis.y: 1; axis.z:0;
+                    angle: 0
+                }
+
+                states: State {
+                    name: "backmini"
+                    PropertyChanges { target: rotationmini; angle: 180 }
+                    when: flipable.flipped
+                }
+
+                transitions: Transition {
+                    NumberAnimation { target: rotationmini; property: "angle"; duration: 400; easing.type: Easing.InOutQuad }
+                }
+
+                Image {
+                    id: currentsongimg
+                    anchors.centerIn: parent
+                    source: playerimg.source
+                    sourceSize.width: parent.width; sourceSize.height: parent.height
+                }
+                ToolIcon {
+                    id: currentlistimg
+                    anchors.centerIn: parent
+                    iconId: "toolbar-list"
+                    onClicked: flipable.flipped = !flipable.flipped
+                }
             }
         }
 
-        ToolBarSpacer {}
         ToolIcon {
-            iconId: "toolbar-view-menu"
-            onClicked: (cplmenu2.status === DialogStatus.Closed) ? cplmenu2.open() : cplmenu2.close();
-        }
-    }
-
-    Menu {
-        id: cplmenu2
-        visualParent: pageStack
-        MenuLayout {
-            MenuItem {
-                text: "Save Current Playlist";
-                onClicked: savelistdialog.open();
+            iconId: "toolbar-edit"
+            enabled: flipable.flipped
+            opacity: enabled ? 1.0 : 0.5
+            onClicked: {
+                toolBarLayout.closing()
+                savelistdialog.open()
             }
-            MenuItem { text: "Clear playlist"; onClicked: removeFromPlaylist("all"); }
+        }
 
-            //onClicked: playaudio(currentplaylistview.currentIndex, true) }
-            //MenuItem { text: "Remove"; onClicked: removeFromPlaylist(); }
-            //MenuItem { text: "Clear playlist"; onClicked: removeFromPlaylist("all"); }
+        ToolIcon {
+            iconId: "toolbar-add"
+            enabled: flipable.flipped
+            opacity: enabled ? 1.0 : 0.5
+            rotation: 45
+            onClicked: {
+                toolBarLayout.closing()
+                playaudio(-1, false, 0)
+                currentPlaylistModel.clear()
+                pageStack.pop()
+            }
         }
     }
 
