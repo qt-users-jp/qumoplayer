@@ -69,7 +69,7 @@ AbstractPage {
                 title: qsTr('Tasuku Suzuki (<a style="%1;text-decoration:none;" href="https://twitter.com/task_jp" >@task_jp</a>)').arg('color: darkorange')
                 enabled: true
                 icon: 'http://api.twitter.com/1/users/profile_image?screen_name=task_jp&size=bigger'
-                detail: qsTr('Developer, Technical Advisor.')
+                detail: qsTr('Developer, Technical Advisor')
             }
 
             AbstractSectionDelegate {
@@ -83,7 +83,7 @@ AbstractPage {
                 title: qsTr('hirao (<a style="%1;text-decoration:none;" href="https://twitter.com/hirao_00" >@hirao_00</a>)').arg('color: darkorange')
                 enabled: true
                 icon: 'http://api.twitter.com/1/users/profile_image?screen_name=hirao_00&size=bigger'
-                detail: qsTr('Icon Designer.')
+                detail: qsTr('Icon Designer')
             }
 
             AbstractSectionDelegate {
