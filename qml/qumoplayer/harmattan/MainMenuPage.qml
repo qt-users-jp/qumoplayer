@@ -6,7 +6,7 @@ import "./Components/"
 
 AbstractTabPage {
     id: root
-    title: qsTr('Qumo Player')
+    title: qsTr('QumoPlayer')
 
     Flickable {
         id: flickable
