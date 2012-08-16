@@ -7,13 +7,31 @@ AbstractLoadablePage {
     id: root
     model: searchModel
 
-    Common.SearchModel {
-        id: searchModel
-        q: root.title
-    }
+    property bool allIsDir: true
 
     onTitleChanged: {
         root.load()
+    }
+
+    Common.SearchModel {
+        id: searchModel
+        q: root.title
+        onCountChanged: timer.start()
+    }
+
+    Timer {
+        id: timer
+        repeat: false
+        interval: 10
+        onTriggered: {
+            for (var i = 0; i < searchModel.count; i++) {
+                if (searchModel.get(i).isDir !== 'true') {
+                    root.allIsDir = false
+                    return
+                }
+            }
+            root.allIsDir = true
+        }
     }
 
     Component {
@@ -113,6 +131,15 @@ AbstractLoadablePage {
         Component.onCompleted: currentIndex = -1;
     }
 
+    function addAll() {
+        for(var i = 0; i < searchModel.count; i++ ) {
+            var item = searchModel.get(i)
+            if (item.type === 'song') {
+                currentPlaylistModel.append(item)
+            }
+        }
+    }
+
     toolBarLayout: AbstractToolBarLayout { id: toolBarLayout
         ToolIcon {
             id: nowPlaying
@@ -128,14 +155,12 @@ AbstractLoadablePage {
         ToolIcon {
             id: playNow
             iconId: "toolbar-mediacontrol-play"
-            enabled: searchModel.count > 0
+            enabled: !root.allIsDir
             opacity: enabled ? 1.0 : 0.5
             onClicked: {
                 toolBarLayout.closing()
                 currentPlaylistModel.clear()
-                for(var i = 0; i < searchModel.count; i++ ) {
-                    currentPlaylistModel.append(searchModel.get(i))
-                }
+                addAll()
                 playerPage.playaudio(0, true, 0)
                 pageStack.push(playerPage)
             }
@@ -144,13 +169,11 @@ AbstractLoadablePage {
         ToolIcon {
             id: addToPlaylist
             iconId: "toolbar-add"
-            enabled: searchModel.count > 0
+            enabled: !root.allIsDir
             opacity: enabled ? 1.0 : 0.5
             onClicked: {
                 toolBarLayout.closing()
-                for(var i = 0; i < searchModel.count; i++ ) {
-                    currentPlaylistModel.append(searchModel.get(i))
-                }
+                addAll()
                 pageStack.pop()
             }
         }

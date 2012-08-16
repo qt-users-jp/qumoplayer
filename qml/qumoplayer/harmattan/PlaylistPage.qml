@@ -47,6 +47,13 @@ AbstractLoadablePage {
         }
     }
 
+    function addAll() {
+        for(var i = 0; i < playlistModel.count; i++ ) {
+            var item = playlistModel.get(i)
+            currentPlaylistModel.append(item)
+        }
+    }
+
     AbstractListView {
         id: playlistView
         anchors.fill: parent
@@ -80,9 +87,7 @@ AbstractLoadablePage {
             onClicked: {
                 toolBarLayout.closing()
                 currentPlaylistModel.clear()
-                for(var i = 0; i < playlistModel.count; i++ ) {
-                    currentPlaylistModel.append(playlistModel.get(i))
-                }
+                addAll()
                 playerPage.playaudio(0, true, 0)
                 pageStack.push(playerPage)
             }
@@ -95,9 +100,7 @@ AbstractLoadablePage {
             opacity: enabled ? 1.0 : 0.5
             onClicked: {
                 toolBarLayout.closing()
-                for(var i = 0; i < playlistModel.count; i++ ) {
-                    currentPlaylistModel.append(playlistModel.get(i))
-                }
+                addAll()
                 pageStack.pop()
             }
         }

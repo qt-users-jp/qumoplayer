@@ -57,12 +57,12 @@ function createXMLHttpRequest(method, url, callback) {
 
 function onXmlReadyStateChange(request, callback) {
 
-    console.debug(request.readyState);
-    console.debug(request.status);
+//    console.debug(request.readyState);
+//    console.debug(request.status);
     if ( request.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-        console.debug(request.getAllResponseHeaders());
+//        console.debug(request.getAllResponseHeaders());
     } else if ( request.readyState === 4 && request.status === 200 ) {
-        console.debug(request.responseText);
+//        console.debug(request.responseText);
         callback(request.responseText);
     } else {
 //        callback("Loading...");
