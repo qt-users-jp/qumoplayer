@@ -7,6 +7,7 @@ Rectangle {
     color: 'darkorange'
 
     property alias title: title.text
+    property alias capitalization: title.font.capitalization
 
     Text {
         id: title

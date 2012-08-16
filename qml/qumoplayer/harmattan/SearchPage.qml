@@ -93,6 +93,7 @@ AbstractLoadablePage {
         AbstractSectionDelegate {
             width: searchView.width
             title: section
+            capitalization: Font.Capitalize
         }
     }
 
