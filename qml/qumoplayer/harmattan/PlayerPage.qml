@@ -9,7 +9,6 @@ import "./Components/"
 AbstractPage {
     id: root
 
-    property int currentindex: 0
     property bool working: false
 
     title: qsTr("Now Playing")
@@ -125,7 +124,7 @@ AbstractPage {
                         width: parent.width * 0.75
                         anchors.horizontalCenter: parent.horizontalCenter
                         minimumValue: 0
-                        maximumValue: root.currentindex < currentPlaylistModel.count - 1 ? 0 : currentPlaylistModel.get(root.currentindex).duration * 1000
+//                        maximumValue: currentPlaylistView.currentIndex < currentPlaylistModel.count - 1 ? 0 : currentPlaylistModel.get(currentPlaylistView.currentIndex).duration * 1000
                         value: player.position
                     }
 
@@ -190,7 +189,7 @@ AbstractPage {
 
                             ToolIcon {
                                 iconId: "toolbar-mediacontrol-previous"
-                                onClicked: { if (currentindex !== 0 ) { currentindex = currentindex - 1; playaudio(currentindex, true, 0); } }
+                                onClicked: { if (currentPlaylistView.currentIndex !== 0 ) { currentPlaylistView.decrementCurrentIndex(); playaudio(currentPlaylistView.currentIndex, true, 0); } }
                             }
 
                             ToolIcon {
@@ -200,7 +199,7 @@ AbstractPage {
                                     if(player.paused || !player.playing) {
                                         console.debug("current position is ".concat(player.position))
                                         console.debug(Math.floor(player.position / 1000))
-                                        Subsonic.ping(playaudio(currentindex, true, Math.floor(player.position / 1000)))
+                                        Subsonic.ping(playaudio(currentPlaylistView.currentIndex, true, Math.floor(player.position / 1000)))
                                         //player.play();
                                     } else {
                                         player.pause();
@@ -217,7 +216,7 @@ AbstractPage {
                             }
                             ToolIcon {
                                 iconId: "toolbar-mediacontrol-next"
-                                onClicked: { if (currentindex !== currentPlaylistView.count -1) { currentindex = currentindex + 1; playaudio(currentindex, true, 0); } }
+                                onClicked: { if (currentPlaylistView.currentIndex !== currentPlaylistView.count -1) { currentPlaylistView.incrementCurrentIndex(); playaudio(currentPlaylistView.currentIndex, true, 0); } }
                             }
                         }
                     }
@@ -231,7 +230,6 @@ AbstractPage {
             model: currentPlaylistModel
             delegate: currentPlaylistDelegate
             clip: true
-            currentIndex: -1
         }
         Component {
             id: currentPlaylistDelegate
@@ -288,14 +286,14 @@ AbstractPage {
         onStatusChanged: {
             switch(status) {
             case Audio.EndOfMedia: {
-                console.debug(currentindex)
+                console.debug(currentPlaylistView.currentIndex)
                 console.debug("Audio Status: Loaded");
-                if ( currentindex !== currentPlaylistModel.count -1 ) {
-                    currentindex = currentindex + 1;
-                    playaudio(currentindex, true, 0);
+                if (currentPlaylistView.currentIndex !== currentPlaylistModel.count -1) {
+                    currentPlaylistView.incrementCurrentIndex()
+                    playaudio(currentPlaylistView.currentIndex, true, 0);
                 } else if(repeated) {
-                    currentindex = 0;
-                    playaudio(currentindex, true, 0);
+                    currentPlaylistView.currentIndex = 0;
+                    playaudio(currentPlaylistView.currentIndex, true, 0);
                 } else {
                     player.pause()
                 }
@@ -349,34 +347,34 @@ AbstractPage {
     }
 
     function playaudio(index, play, offset) {
-        //player.pause();
-        currentindex = index;
-        if (index > -1) {
-            playerimg.source = Subsonic.getCoverArt(currentPlaylistModel.get(currentindex).coverArt, 300);
-            console.debug(playerimg.source);
-            player.source = Subsonic.getStreamSongUrl(currentPlaylistModel.get(currentindex).id, "128", "mp3", offset);
-            console.debug(player.source);
-            songtitletext.text = currentPlaylistModel.get(currentindex).title;
-            artisttext.text = currentPlaylistModel.get(currentindex).artist;
-            pgbar.maximumValue = currentPlaylistModel.get(currentindex).duration * 1000;
-            console.debug(songtitletext.text + artisttext.text + pgbar.maximumValue );
-            if (play) { player.play(); }
-        }
+        currentPlaylistView.currentIndex = index
+        if (index > 0)
+            player.source = Subsonic.getStreamSongUrl(currentPlaylistModel.get(currentPlaylistView.currentIndex).id, "128", "mp3", offset)
+        if (play) { player.play(); }
     }
 
-    function removeFromPlaylist(string) {
-        if(string === "all") {
-            currentPlaylistView.currentIndex = -1;
-            currentPlaylistModel.clear();
-            playaudio(-1, false, 0);
-        } else {
-            currentPlaylistModel.remove(currentPlaylistView.currentIndex);
-            if(currentindex === currentPlaylistView.currentIndex) {
-                currentindex = currentPlaylistView.currentIndex;
-                currentPlaylistView.currentIndex = -1;
-                playaudio(currentindex, false, 0);
+    StateGroup {
+        states: [
+            State {
+                when: currentPlaylistView.currentIndex > -1
+                PropertyChanges {
+                    target: playerimg
+                    source: Subsonic.getCoverArt(currentPlaylistModel.get(currentPlaylistView.currentIndex).coverArt, 300)
+                }
+                PropertyChanges {
+                    target: songtitletext
+                    text: currentPlaylistModel.get(currentPlaylistView.currentIndex).title
+                }
+                PropertyChanges {
+                    target: artisttext
+                    text: currentPlaylistModel.get(currentPlaylistView.currentIndex).artist
+                }
+                PropertyChanges {
+                    target: pgbar
+                    maximumValue: currentPlaylistModel.get(currentPlaylistView.currentIndex).duration * 1000
+                }
             }
-        }
+        ]
     }
 
     function incrindex() {
@@ -473,8 +471,8 @@ AbstractPage {
             break;
         }
         case PageStatus.Active: {
-            if(currentPlaylistModel.count !== 0 && currentindex === 0) {
-                playaudio(currentindex, false, 0);
+            if(currentPlaylistModel.count !== 0 && currentPlaylistView.currentIndex < 0) {
+                playaudio(0, false, 0);
                 break;
             }
         }
