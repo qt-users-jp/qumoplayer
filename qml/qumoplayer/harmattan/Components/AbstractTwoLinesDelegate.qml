@@ -9,7 +9,7 @@ AbstractDelegate {
 
     Column {
         anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: root.height; right: parent.right; rightMargin: root.rightMargin }
-        Text {
+        AutoScrollText {
             id: title
             width: parent.width
             font.pointSize: detail.text.length === 0 ? 25 : 18

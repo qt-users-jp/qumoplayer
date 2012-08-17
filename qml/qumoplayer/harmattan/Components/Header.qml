@@ -13,7 +13,7 @@ Rectangle {
 
     property alias title: title.text
 
-    Text {
+    AutoScrollText {
         id: title
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left

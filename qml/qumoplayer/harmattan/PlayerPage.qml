@@ -102,7 +102,7 @@ AbstractPage {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: 400
                     spacing: 10
-                    Text {
+                    AutoScrollText {
                         id: songtitletext
                         width: parent.width
                         horizontalAlignment: Text.AlignHCenter
@@ -110,7 +110,7 @@ AbstractPage {
                         color: "white"
                         font.pointSize: 25
                     }
-                    Text {
+                    AutoScrollText {
                         id: artisttext
                         width: parent.width
                         horizontalAlignment: Text.AlignHCenter
