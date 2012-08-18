@@ -240,9 +240,11 @@ AbstractPage {
 
             clip: true
         }
+
         Component {
             id: currentPlaylistDelegate
             AbstractTwoLinesDelegate {
+                id: delegate
                 width: ListView.view.width
                 icon: Subsonic.getCoverArt(model.coverArt, 300)
                 rightMargin: operationArea.width
@@ -273,6 +275,21 @@ AbstractPage {
                             }
                         }
                     }
+                }
+
+                ListView.onRemove: SequentialAnimation {
+                    PropertyAction { target: delegate; property: "ListView.delayRemove"; value: true }
+                    PropertyAction { target: delegate; property: "clip"; value: true }
+                    NumberAnimation { target: delegate; property: "opacity"; to: 0.25; duration: 200; easing.type: Easing.InOutQuad }
+                    NumberAnimation {
+                        target: delegate
+                        property: "height"
+                        to: 0
+                        duration: 250
+                        easing.type: Easing.InOutQuad
+                    }
+                    PropertyAction { target: delegate; property: "clip"; value: false }
+                    PropertyAction { target: delegate; property: "ListView.delayRemove"; value: false }
                 }
             }
         }
