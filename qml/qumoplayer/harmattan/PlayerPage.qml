@@ -13,6 +13,8 @@ AbstractPage {
 
     title: qsTr("Now Playing")
 
+    property variant indicesShuffled: []
+
     Flipable {
         id: flipable
         front: playerFace
@@ -189,7 +191,7 @@ AbstractPage {
 
                             ToolIcon {
                                 iconId: "toolbar-mediacontrol-previous"
-                                onClicked: { if (currentPlaylistView.currentIndex !== 0 ) { currentPlaylistView.decrementCurrentIndex(); playaudio(currentPlaylistView.currentIndex, true, 0); } }
+                                onClicked: player.playPrevious()
                             }
 
                             ToolIcon {
@@ -216,7 +218,7 @@ AbstractPage {
                             }
                             ToolIcon {
                                 iconId: "toolbar-mediacontrol-next"
-                                onClicked: { if (currentPlaylistView.currentIndex !== currentPlaylistView.count -1) { currentPlaylistView.incrementCurrentIndex(); playaudio(currentPlaylistView.currentIndex, true, 0); } }
+                                onClicked: player.playNext()
                             }
                         }
                     }
@@ -229,6 +231,13 @@ AbstractPage {
             anchors.fill: parent
             model: currentPlaylistModel
             delegate: currentPlaylistDelegate
+            highlight: Rectangle {
+                width: currentPlaylistView.width
+                height: 10
+                color: 'darkorange'
+                opacity: 0.5
+            }
+
             clip: true
         }
         Component {
@@ -278,27 +287,80 @@ AbstractPage {
         //timerShowTime: 3000
     }
 
+    Connections {
+        target: currentPlaylistModel
+        onCountChanged: player.shuffle()
+    }
 
     Audio {
         id: player
         property bool shuffled: false
         property bool repeated: false
-        onStatusChanged: {
-            switch(status) {
-            case Audio.EndOfMedia: {
-                console.debug(currentPlaylistView.currentIndex)
-                console.debug("Audio Status: Loaded");
+
+        function playNext() {
+            if (player.shuffled) {
+                var index = root.indicesShuffled.indexOf(currentPlaylistView.currentIndex)
+                if (index !== root.indicesShuffled.length - 1) {
+                    currentPlaylistView.currentIndex = root.indicesShuffled[index+1]
+                    playaudio(currentPlaylistView.currentIndex, true, 0);
+                } else if (player.repeated) {
+                    currentPlaylistView.currentIndex = root.indicesShuffled[0]
+                    playaudio(currentPlaylistView.currentIndex, true, 0);
+                } else {
+                    player.pause()
+                }
+            } else {
                 if (currentPlaylistView.currentIndex !== currentPlaylistModel.count -1) {
                     currentPlaylistView.incrementCurrentIndex()
                     playaudio(currentPlaylistView.currentIndex, true, 0);
-                } else if(repeated) {
+                } else if(player.repeated) {
                     currentPlaylistView.currentIndex = 0;
                     playaudio(currentPlaylistView.currentIndex, true, 0);
                 } else {
                     player.pause()
                 }
-                    break;
             }
+        }
+
+        function playPrevious() {
+            if (player.shuffled) {
+                var index = root.indicesShuffled.indexOf(currentPlaylistView.currentIndex)
+                if (index !== 0) {
+                    currentPlaylistView.currentIndex = root.indicesShuffled[index - 1]
+                    playaudio(currentPlaylistView.currentIndex, true, 0)
+                } else if (player.repeated) {
+                    currentPlaylistView.currentIndex = root.indicesShuffled[currentPlaylistModel.count - 1]
+                    playaudio(currentPlaylistView.currentIndex, true, 0)
+                }
+            } else {
+                if (currentPlaylistView.currentIndex !== 0) {
+                    currentPlaylistView.decrementCurrentIndex()
+                    playaudio(currentPlaylistView.currentIndex, true, 0)
+                } else if (player.repeated) {
+                    currentPlaylistView.currentIndex = currentPlaylistModel.count - 1
+                    playaudio(currentPlaylistView.currentIndex, true, 0)
+                }
+            }
+        }
+
+        function shuffle() {
+            if (player.shuffled) {
+                var indicesShuffled = new Array()
+                for (var i = 0; i < currentPlaylistModel.count; i++) {
+                    indicesShuffled.push(i)
+                }
+                indicesShuffled.sort(function(a, b) { return Math.random() * 2 - 1 })
+                root.indicesShuffled = indicesShuffled
+            }
+        }
+
+        onShuffledChanged: player.shuffle()
+
+        onStatusChanged: {
+            switch(status) {
+            case Audio.EndOfMedia:
+                player.playNext()
+                break;
             /*case Audio.Buffering | Audio.Stalled | Audio.Loading: {
                 working = true;
                 break;
@@ -348,7 +410,7 @@ AbstractPage {
 
     function playaudio(index, play, offset) {
         currentPlaylistView.currentIndex = index
-        if (index > 0)
+        if (index > -1)
             player.source = Subsonic.getStreamSongUrl(currentPlaylistModel.get(currentPlaylistView.currentIndex).id, "128", "mp3", offset)
         if (play) { player.play(); }
     }
