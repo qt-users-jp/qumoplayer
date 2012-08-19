@@ -427,8 +427,13 @@ AbstractPage {
 
     function playaudio(index, play, offset) {
         currentPlaylistView.currentIndex = index
-        if (index > -1)
-            player.source = Subsonic.getStreamSongUrl(currentPlaylistModel.get(currentPlaylistView.currentIndex).id, "128", "mp3", offset)
+        if (index > -1) {
+            var song = currentPlaylistModel.get(currentPlaylistView.currentIndex)
+            if (typeof song.streamId !== 'undefined' && song.streamId.length > 0)
+                player.source = Subsonic.getStreamSongUrl(song.streamId, "128", "mp3", offset)
+            else
+                player.source = Subsonic.getStreamSongUrl(song.id, "128", "mp3", offset)
+        }
         if (play) { player.play(); }
     }
 

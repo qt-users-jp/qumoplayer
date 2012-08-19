@@ -111,7 +111,12 @@ function getStreamSongUrl(id, maxBitrate, format, offsetseconds) {
 
 function search2(query, callback) {
     var url = serverUrl().concat("search2.view").concat(generateParameters({query: query}))
-    //var url = baseurl + "search2.view?query=" + query + "&v=" + api_version + "&c=" + clientname + "&f=json";
+    createXMLHttpRequest('GET', url, callback)
+
+}
+
+function getPodcasts(callback) {
+    var url = serverUrl().concat("getPodcasts.view").concat(generateParameters())
     createXMLHttpRequest('GET', url, callback)
 
 }

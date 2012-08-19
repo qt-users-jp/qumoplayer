@@ -23,4 +23,8 @@ AbstractSubsonicListModel {
     //for Search function
     XmlRole { name: "name"; query: "@name/string()" }
     XmlRole { name: "type"; query: "name()" }
+
+    //for Podcasts
+    XmlRole { name: "streamId"; query: "@streamId/string()" }
+    XmlRole { name: "publishDate"; query: "@publishDate/string()" }
 }

@@ -19,6 +19,7 @@ AbstractPage {
 
         LibraryPage { id: libraryPage; pageStack: root.pageStack }
         PlaylistsPage { id: playlistsPage; pageStack: root.pageStack }
+        PodcastsPage { id: podcastsPage; pageStack: root.pageStack }
         MainMenuPage { id: mainMenuPage; pageStack: root.pageStack }
     }
 
@@ -35,7 +36,6 @@ AbstractPage {
                 tab: playlistsPage
                 enabled: serverListModel.currentIndex > -1
             }
-
             TabButton {
                 iconSource: handleIconSource("toolbar-headphones")
                 enabled: currentPlaylistModel.count > 0
@@ -47,8 +47,10 @@ AbstractPage {
                     }
                 }
             }
-            ToolButton {
-                enabled: false
+            TabButton {
+                iconSource: handleIconSource("toolbar-share".concat(enabled ? '' : '-dimmed'))
+                tab: podcastsPage
+                enabled: serverListModel.currentIndex > -1
             }
             TabButton {
                 iconSource: handleIconSource("toolbar-view-menu")
