@@ -1,5 +1,5 @@
-qumoplayer (0.0.1) unstable; urgency=low
-
+qumoplayer (0.1.0) unstable; urgency=low
   * Initial Release.
+  * http://dev.qtquick.me/versions/32
 
- -- unknown <kenya888@unknown>  Tue, 10 Jan 2012 10:44:36 +0900
+ -- Takahiro Hashimoto <kenya888@qtquick.me>  Mon, 20 Aug 2012 11:24:08 +0900
