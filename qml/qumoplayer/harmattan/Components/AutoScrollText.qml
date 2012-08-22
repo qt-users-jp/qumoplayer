@@ -16,9 +16,9 @@ Item {
     signal linkActivated(string link)
 
     Timer {
-        id: delayedTimer
         repeat: false
         interval: 2500
+        running: root.width < text.implicitWidth
         onTriggered: animation.start()
     }
 
@@ -29,10 +29,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         onTextChanged: {
-            delayedTimer.stop()
             animation.stop()
-            if (root.width < implicitWidth)
-                delayedTimer.start()
         }
         onLinkActivated: root.linkActivated(link)
     }
@@ -44,7 +41,7 @@ Item {
             property: "x"
             from: 0
             to: root.width - text.implicitWidth
-            duration: Math.max((text.implicitWidth - root.width) * 50, 0)
+            duration: Math.max((text.implicitWidth - root.width) * 25, 0)
             loops: (text.implicitWidth > root.width ? 1 : 0)
         }
         PauseAnimation { duration: 2500 }
@@ -53,7 +50,7 @@ Item {
     StateGroup {
         states: [
             State {
-                when: animation.running || delayedTimer.running
+                when: animation.running
                 AnchorChanges {
                     target: text
                     anchors.left: undefined
