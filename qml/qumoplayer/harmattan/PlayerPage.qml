@@ -105,7 +105,7 @@ AbstractPage {
                     width: 400
                     spacing: 10
                     AutoScrollText {
-                        id: songtitletext
+                        id: songTitle
                         width: parent.width
                         horizontalAlignment: Text.AlignHCenter
                         elide: Text.ElideRight
@@ -113,7 +113,7 @@ AbstractPage {
                         font.pointSize: 25
                     }
                     AutoScrollText {
-                        id: artisttext
+                        id: artist
                         width: parent.width
                         horizontalAlignment: Text.AlignHCenter
                         elide: Text.ElideRight
@@ -122,104 +122,60 @@ AbstractPage {
                     }
 
                     ProgressBar {
-                        id: pgbar
+                        id: progressBar
                         width: parent.width * 0.75
                         anchors.horizontalCenter: parent.horizontalCenter
                         minimumValue: 0
-//                        maximumValue: currentPlaylistView.currentIndex < currentPlaylistModel.count - 1 ? 0 : currentPlaylistModel.get(currentPlaylistView.currentIndex).duration * 1000
                         value: player.position
                     }
 
-                    Rectangle {
-                        id: listcontrolrect
-                        color: "black"
-                        height: 60; width: 200
+                    Row {
                         anchors.horizontalCenter: parent.horizontalCenter
-
-                        Row {
-                            id: listcontrolrow
-                            anchors.top: parent.top
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            ToolIcon {
-                                id: repeatbtn
-                                iconId: "toolbar-repeat"
-                                onClicked: player.repeated = !player.repeated
-                                states: [
-                                    State {
-                                        name: "repeated"
-                                        PropertyChanges { target: repeatbtn; iconSource: persistentHandleIconSource("toolbar-repeat-white-selected") }
-                                        when: player.repeated
-                                    }
-                                ]
-                            }
-                            ToolIcon {
-                                id: shufflebtn
-                                iconId: "toolbar-shuffle"
-                                onClicked: player.shuffled = !player.shuffled
-                                states: [
-                                    State {
-                                        name: "shuffled"
-                                        PropertyChanges { target: shufflebtn; iconSource: persistentHandleIconSource("toolbar-shuffle-white-selected") }
-                                        when: player.shuffled
-                                    }
-                                ]
-                            }
-                            ToolIcon {
-                                id: mutebtn
-                                iconId: "toolbar-volume"
-                                onClicked: player.muted = !player.muted
-                                states: [
-                                    State {
-                                        name: "mute"
-                                        PropertyChanges { target: mutebtn; iconId: "toolbar-volume-off" }
-                                        when: player.muted
-                                    }
-                                ]
-                            }
+                        ToolIcon {
+                            iconSource: persistentHandleIconSource(player.repeated ? 'toolbar-repeat-white-selected' : 'toolbar-repeat-white')
+                            onClicked: player.repeated = !player.repeated
+                        }
+                        ToolIcon {
+                            iconSource: persistentHandleIconSource(player.shuffled ? 'toolbar-shuffle-white-selected' : 'toolbar-shuffle-white')
+                            onClicked: player.shuffled = !player.shuffled
+                        }
+                        ToolIcon {
+                            iconId: player.muted ? 'toolbar-volume-off' : 'toolbar-volume'
+                            onClicked: player.muted = !player.muted
                         }
                     }
-                    Rectangle {
-                        id: mediacontrolrect
-                        color: "black"
-                        height: 60; width: 200
+                    Row {
                         anchors.horizontalCenter: parent.horizontalCenter
 
-                        Row {
-                            id: mediacontrolrow
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.top: parent.top
+                        ToolIcon {
+                            iconId: "toolbar-mediacontrol-previous"
+                            onClicked: player.playPrevious()
+                        }
 
-                            ToolIcon {
-                                iconId: "toolbar-mediacontrol-previous"
-                                onClicked: player.playPrevious()
-                            }
-
-                            ToolIcon {
-                                id: playicon
-                                iconId: "toolbar-mediacontrol-pause"
-                                onClicked: {
-                                    if(player.paused || !player.playing) {
-                                        console.debug("current position is ".concat(player.position))
-                                        console.debug(Math.floor(player.position / 1000))
-                                        Subsonic.ping(playaudio(currentPlaylistView.currentIndex, true, Math.floor(player.position / 1000)))
-                                        //player.play();
-                                    } else {
-                                        player.pause();
-                                        console.debug("current position is ".concat(player.position))
-                                    }
+                        ToolIcon {
+                            id: playAndPauge
+                            iconId: "toolbar-mediacontrol-play"
+                            onClicked: {
+                                console.debug(Math.floor(player.position / 1000))
+                                if (state == 'playing') {
+                                    player.pause();
+                                } else {
+                                    console.debug("current position is ".concat(player.position))
+                                    Subsonic.ping(playaudio(currentPlaylistView.currentIndex, true, Math.floor(player.position / 1000)))
                                 }
+                            }
 
-                                states: [ State {
-                                        name: "playbtn"
-                                        PropertyChanges { target: playicon; iconId: "toolbar-mediacontrol-play" }
-                                        when: player.paused || !player.playing
-                                    }
-                                ]
-                            }
-                            ToolIcon {
-                                iconId: "toolbar-mediacontrol-next"
-                                onClicked: player.playNext()
-                            }
+                            states: [
+                                State {
+                                    name: 'playing'
+                                    PropertyChanges { target: playAndPauge; iconId: "toolbar-mediacontrol-pause" }
+                                    when: player.playing && !player.paused
+                                }
+                            ]
+                        }
+                        ToolIcon {
+                            iconId: "toolbar-mediacontrol-next"
+                            onClicked: player.playNext()
                         }
                     }
                 }
@@ -296,7 +252,7 @@ AbstractPage {
     }
 
     InfoBanner {
-        id: playerinfobanner
+        id: infoBanner
         iconSource: handleIconSource("bootloader-warning")
         topMargin: 80
         text: "Error: " + player.errorString
@@ -408,7 +364,7 @@ AbstractPage {
             }
             case Audio.InvalidMedia: {
                 console.debug("Audio Status: InvalidMedia");
-                playerinfobanner.show();
+                infoBanner.show();
                 player.stop();
                 break;
             }
@@ -446,28 +402,22 @@ AbstractPage {
                     source: Subsonic.getCoverArt(currentPlaylistModel.get(currentPlaylistView.currentIndex).coverArt, 300)
                 }
                 PropertyChanges {
-                    target: songtitletext
+                    target: songTitle
                     text: currentPlaylistModel.get(currentPlaylistView.currentIndex).title
                 }
                 PropertyChanges {
-                    target: artisttext
+                    target: artist
                     text: currentPlaylistModel.get(currentPlaylistView.currentIndex).artist
                 }
                 PropertyChanges {
-                    target: pgbar
+                    target: progressBar
                     maximumValue: currentPlaylistModel.get(currentPlaylistView.currentIndex).duration * 1000
                 }
             }
         ]
     }
 
-    function incrindex() {
-        currentPlaylistView.incrementCurrentIndex();
-    }
-
     toolBarLayout: AbstractToolBarLayout {
-        id: prefbarlayout
-
         MouseArea {
             width: 80
             height: 64
@@ -479,8 +429,6 @@ AbstractPage {
                 back: currentsongimg
                 width: 50; height: 50
                 anchors.centerIn: parent
-//                anchors.verticalCenter: parent.verticalCenter
-//                anchors.horizontalCenter: parent.horizontalCenter
 
                 transform: Rotation {
                     id: rotationmini
@@ -521,7 +469,7 @@ AbstractPage {
             opacity: enabled ? 1.0 : 0.5
             onClicked: {
                 toolBarLayout.closing()
-                savelistdialog.open()
+                savePlaylistDialog.open()
             }
         }
 
@@ -540,11 +488,11 @@ AbstractPage {
     }
 
     Dialog {
-        id: savelistdialog
+        id: savePlaylistDialog
         visualParent: pageStack
         title: Item { width: parent.width; height: 30; anchors.horizontalCenter: parent.horizontalCenter; Text { id: titletext; anchors.fill: parent; text: "Save Playlist"; font.pointSize: 20; color: "white" } Rectangle { height: 1; width: parent.width; color: "darkorange"; anchors.top: titletext.bottom} }
         content: Item { width: parent.width; height: 100; anchors.horizontalCenter: parent.horizontalCenter; Text { id: listnametext; font.pointSize: 16; color: "white"; text: "Playlist name:"; } TextField { id: listname; anchors { top:listnametext.bottom; topMargin: 5; left: parent.left; right: parent.right } } }
-        buttons: Row { spacing: 10; anchors.horizontalCenter: parent.horizontalCenter; Button { width: 120; text: "save"; onClicked: savelistdialog.accept();} Button { width: 120; text: "cancel"; onClicked: savelistdialog.reject(); } }
+        buttons: Row { spacing: 10; anchors.horizontalCenter: parent.horizontalCenter; Button { width: 120; text: "save"; onClicked: savePlaylistDialog.accept();} Button { width: 120; text: "cancel"; onClicked: savePlaylistDialog.reject(); } }
         onAccepted: Subsonic.createPlayList(listname.text, currentPlaylistModel, function(ret){console.debug(ret)});
     }
 
