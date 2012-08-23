@@ -226,6 +226,9 @@ AbstractPage {
                     onRemove: {
                         for (var i = 0; i < currentPlaylistModel.count; i++) {
                             if (currentPlaylistModel.get(i).id === model.id) {
+                                if (currentPlaylistView.currentIndex === model.index) {
+                                    playaudio(-1, false, 0)
+                                }
                                 currentPlaylistModel.remove(i)
                                 break
                             }
@@ -385,12 +388,13 @@ AbstractPage {
         currentPlaylistView.currentIndex = index
         if (index > -1) {
             var song = currentPlaylistModel.get(currentPlaylistView.currentIndex)
-            if (typeof song.streamId !== 'undefined' && song.streamId.length > 0)
+            if (typeof song.streamId !== 'undefined' && song.streamId.length > 0) {
                 player.source = Subsonic.getStreamSongUrl(song.streamId, "128", "mp3", offset)
-            else
+            } else {
                 player.source = Subsonic.getStreamSongUrl(song.id, "128", "mp3", offset)
+            }
         }
-        if (play) { player.play(); }
+        if (play) { player.play() } else { player.stop() }
     }
 
     StateGroup {
