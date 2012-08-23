@@ -9,7 +9,7 @@ Rectangle {
     property alias title: title.text
     property alias capitalization: title.font.capitalization
 
-    Text {
+    AutoScrollText {
         id: title
         anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: 10; right: parent.right }
         font.pointSize: 16
