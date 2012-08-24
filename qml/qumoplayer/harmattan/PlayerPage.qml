@@ -67,6 +67,7 @@ AbstractPage {
                     PropertyChanges {
                         target: playerFace
                         columns: 2
+                        spacing: 25
                     }
                     PropertyChanges {
                         target: upper
@@ -84,7 +85,7 @@ AbstractPage {
             Item {
                 id: upper
                 width: 480
-                height: 400
+                height: 360
                 Image {
                     id: playerimg
                     anchors.centerIn: parent
@@ -103,7 +104,7 @@ AbstractPage {
                     anchors.bottom: parent.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: 400
-                    spacing: 10
+                    spacing: 5
                     AutoScrollText {
                         id: songTitle
                         width: parent.width
@@ -121,9 +122,48 @@ AbstractPage {
                         font.pointSize: 15
                     }
 
+                    Row {
+                        id: timeRow
+                        anchors { bottom: progressBar.top; horizontalCenter: parent.horizontalCenter }
+                        width: parent.width * 0.85
+
+                        Text {
+                            id: position
+                            width: parent.width / 2
+                            horizontalAlignment: Text.AlignLeft
+                            text: convertTime(0)
+                            color: "white"
+                            font.pointSize: 13
+
+                            states: [
+                                State {
+                                    when: player.tictac
+                                    PropertyChanges {
+                                        target: position
+                                        text: convertTime(player.secondsPosition)
+                                    }
+                                    PropertyChanges {
+                                        target: player
+                                        tictac: false
+                                    }
+                                }
+                            ]
+                        }
+
+                        Text {
+                            id: duration
+                            width: parent.width / 2
+                            horizontalAlignment: Text.AlignRight
+                            text: convertTime(0)
+                            color: "white"
+                            font.pointSize: 13
+                        }
+
+                    }
+
                     ProgressBar {
                         id: progressBar
-                        width: parent.width * 0.75
+                        width: timeRow.width
                         anchors.horizontalCenter: parent.horizontalCenter
                         minimumValue: 0
                         value: player.position
@@ -156,12 +196,11 @@ AbstractPage {
                             id: playAndPauge
                             iconId: "toolbar-mediacontrol-play"
                             onClicked: {
-                                console.debug(Math.floor(player.position / 1000))
                                 if (state == 'playing') {
                                     player.pause();
                                 } else {
                                     console.debug("current position is ".concat(player.position))
-                                    Subsonic.ping(playaudio(currentPlaylistView.currentIndex, true, Math.floor(player.position / 1000)))
+                                    Subsonic.ping(playaudio(currentPlaylistView.currentIndex, true, Math.floor(player.secondsPosition)))
                                 }
                             }
 
@@ -268,10 +307,18 @@ AbstractPage {
         onCountChanged: player.shuffle()
     }
 
+    Connections {
+        target: player
+        onSecondsPositionChanged: { player.tictac = true }
+    }
+
     Audio {
         id: player
         property bool shuffled: false
         property bool repeated: false
+
+        property int secondsPosition: Math.floor(player.position / 1000)
+        property bool tictac: false
 
         function playNext() {
             if (player.shuffled) {
@@ -397,6 +444,12 @@ AbstractPage {
         if (play) { player.play() } else { player.stop() }
     }
 
+    function convertTime(sec) {
+        var minutes = Math.floor(sec / 60)
+        var seconds = Math.floor(sec - minutes * 60 )
+        return (minutes < 10 ? '0'.concat(minutes) : minutes).concat(':').concat(seconds < 10 ? '0'.concat(seconds) : seconds)
+    }
+
     StateGroup {
         states: [
             State {
@@ -416,6 +469,10 @@ AbstractPage {
                 PropertyChanges {
                     target: progressBar
                     maximumValue: currentPlaylistModel.get(currentPlaylistView.currentIndex).duration * 1000
+                }
+                PropertyChanges {
+                    target: duration
+                    text: convertTime(currentPlaylistModel.get(currentPlaylistView.currentIndex).duration)
                 }
             }
         ]
