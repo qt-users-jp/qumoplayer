@@ -7,6 +7,10 @@ AbstractDelegate {
     property alias detail: detail.text
     property bool linkActivation: false
 
+    onPressAndHold: {
+        title.doScroll()
+    }
+
     Column {
         anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: root.height; right: parent.right; rightMargin: root.rightMargin }
         AutoScrollText {

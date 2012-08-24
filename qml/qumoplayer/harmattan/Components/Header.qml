@@ -13,6 +13,13 @@ Rectangle {
 
     property alias title: title.text
 
+    MouseArea {
+        anchors.fill: parent
+        onPressAndHold: {
+            title.doScroll()
+        }
+    }
+
     AutoScrollText {
         id: title
         anchors.verticalCenter: parent.verticalCenter

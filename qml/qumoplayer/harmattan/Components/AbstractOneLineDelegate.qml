@@ -5,6 +5,10 @@ AbstractDelegate {
 
     property alias title: title.text
 
+    onPressAndHold: {
+        title.doScroll()
+    }
+
     AutoScrollText {
         id: title
         anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: root.height; right: parent.right; rightMargin: root.rightMargin }

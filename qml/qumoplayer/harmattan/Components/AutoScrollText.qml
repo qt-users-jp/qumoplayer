@@ -15,6 +15,12 @@ Item {
 
     signal linkActivated(string link)
 
+    function doScroll() {
+        if (!animation.running) {
+            animation.start()
+        }
+    }
+
     Timer {
         repeat: false
         interval: 2500
