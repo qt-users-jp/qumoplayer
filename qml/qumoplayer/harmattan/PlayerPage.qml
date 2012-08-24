@@ -108,18 +108,30 @@ AbstractPage {
                     AutoScrollText {
                         id: songTitle
                         width: parent.width
+                        height: 50
+                        verticalAlignment: Text.AlignTop
                         horizontalAlignment: Text.AlignHCenter
                         elide: Text.ElideRight
                         color: "white"
                         font.pointSize: 25
+                        MouseArea {
+                            anchors.fill: parent
+                            onPressAndHold: songTitle.doScroll()
+                        }
                     }
                     AutoScrollText {
                         id: artist
                         width: parent.width
+                        height: 25
+                        verticalAlignment: Text.AlignTop
                         horizontalAlignment: Text.AlignHCenter
                         elide: Text.ElideRight
                         color: "white"
                         font.pointSize: 15
+                        MouseArea {
+                            anchors.fill: parent
+                            onPressAndHold: artist.doScroll()
+                        }
                     }
 
                     Row {
