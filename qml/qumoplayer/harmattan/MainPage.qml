@@ -36,17 +36,32 @@ AbstractPage {
                 tab: playlistsPage
                 enabled: serverListModel.currentIndex > -1
             }
+
             TabButton {
+                id: nowPlaying
+                anchors.verticalCenter: parent.verticalCenter
                 iconSource: handleIconSource("toolbar-headphones")
                 enabled: currentPlaylistModel.count > 0
                 opacity: enabled ? 1.0 : 0.5
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
                         pageStack.push(playerPage)
                     }
                 }
+                states: [
+                    State {
+                        name: 'nowPlaying'
+                        when: playerPage.playing
+                        PropertyChanges {
+                            target: nowPlaying
+                            iconSource: playerPage.playingimg
+                        }
+                    }
+                ]
             }
+
             TabButton {
                 iconSource: handleIconSource("toolbar-share".concat(enabled ? '' : '-dimmed'))
                 tab: podcastsPage

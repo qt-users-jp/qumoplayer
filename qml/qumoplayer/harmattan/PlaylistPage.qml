@@ -78,6 +78,16 @@ AbstractLoadablePage {
                 toolBarLayout.closing()
                 pageStack.push(playerPage)
             }
+            states: [
+                State {
+                    name: 'nowPlaying'
+                    when: playerPage.playing
+                    PropertyChanges {
+                        target: nowPlaying
+                        iconSource: playerPage.playingimg
+                    }
+                }
+            ]
         }
         ToolIcon {
             id: playNow

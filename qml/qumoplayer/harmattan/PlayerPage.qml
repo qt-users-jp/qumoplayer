@@ -10,6 +10,8 @@ AbstractPage {
     id: root
 
     property bool working: false
+    property alias playingimg: currentsongimg.source
+    property alias playing: player.playing
 
     title: qsTr("Now Playing")
 
@@ -472,6 +474,10 @@ AbstractPage {
                 PropertyChanges {
                     target: playerimg
                     source: Subsonic.getCoverArt(currentPlaylistModel.get(currentPlaylistView.currentIndex).coverArt, 300)
+                }
+                PropertyChanges {
+                    target: currentsongimg
+                    source: Subsonic.getCoverArt(currentPlaylistModel.get(currentPlaylistView.currentIndex).coverArt, 50)
                 }
                 PropertyChanges {
                     target: songTitle
