@@ -284,6 +284,9 @@ AbstractPage {
                                 break
                             }
                         }
+                        if (currentPlaylistView.count == 0 ) {
+                            pageStack.pop()
+                        }
                     }
                 }
 
