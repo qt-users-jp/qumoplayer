@@ -4,7 +4,7 @@ Version=1.0
 Type=Application
 Terminal=false
 Name=qumoplayer
-Exec=/usr/bin/invoker --type=d -s /opt/qumoplayer/bin/qumoplayer
+Exec=/usr/bin/invoker --splash=/opt/qumoplayer/qml/qumoplayer/image/qumoplayer-splash-portrait.png --splash-landscape=/opt/qumoplayer/qml/qumoplayer/image/qumoplayer-splash-landscape.png --type=d -s /opt/qumoplayer/bin/qumoplayer
 Icon=/usr/share/icons/hicolor/80x80/apps/qumoplayer80.png
 X-Window-Icon=
 X-HildonDesk-ShowInToolbar=true
