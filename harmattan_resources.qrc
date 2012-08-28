@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/qumoplayer/harmattan/AboutPage.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractDelegate.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractListView.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractLoadablePage.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractOneLineDelegate.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractPage.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractSectionDelegate.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractTabLoadablePage.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractTabPage.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractToolBarLayout.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AbstractTwoLinesDelegate.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/AutoScrollText.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/Header.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/OperationArea.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/Separator.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/Settings.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/ToolBarSpacer.qml</file>
+        <file>qml/qumoplayer/harmattan/LibraryPage.qml</file>
+        <file>qml/qumoplayer/harmattan/main.qml</file>
+        <file>qml/qumoplayer/harmattan/MainMenuPage.qml</file>
+        <file>qml/qumoplayer/harmattan/MainPage.qml</file>
+        <file>qml/qumoplayer/harmattan/MusicDirectoryPage.qml</file>
+        <file>qml/qumoplayer/harmattan/PlayerPage.qml</file>
+        <file>qml/qumoplayer/harmattan/PlaylistPage.qml</file>
+        <file>qml/qumoplayer/harmattan/PlaylistsPage.qml</file>
+        <file>qml/qumoplayer/harmattan/PodcastsPage.qml</file>
+        <file>qml/qumoplayer/harmattan/PreferencesPage.qml</file>
+        <file>qml/qumoplayer/harmattan/SearchPage.qml</file>
+        <file>qml/qumoplayer/harmattan/ServerListPage.qml</file>
+        <file>qml/qumoplayer/harmattan/ServerSettingsPage.qml</file>
+    </qresource>
+</RCC>

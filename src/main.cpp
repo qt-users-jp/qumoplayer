@@ -34,8 +34,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QApplication> app(createApplication(argc, argv));
 
     QmlApplicationViewer viewer;
-    //viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    // viewer.setMainQmlFile(QLatin1String("qml/qumoplayer/main.qml"));
 
     QString mainFile;
 #if defined(Q_OS_SYMBIAN) || defined(Q_WS_SIMULATOR)
@@ -49,13 +47,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     mainFile = QLatin1String("qml/qumoplayer/desktop/main.qml");
 #endif
 
+    qmlRegisterType<QumoPlayerTest>("me.qtquick.qumoplayer", 1, 0, "Test");
+
     QDir home(QDir::homePath());
     if (home.exists(mainFile)) {
         mainFile = home.absoluteFilePath(mainFile);
+        viewer.setMainQmlFile(mainFile);
+    } else {
+        viewer.setSource(QUrl(QString("qrc:/%1").arg(mainFile)));
     }
 
-    qmlRegisterType<QumoPlayerTest>("me.qtquick.qumoplayer", 1, 0, "Test");
-    viewer.setMainQmlFile(mainFile);
     viewer.setAttribute(Qt::WA_OpaquePaintEvent);
     viewer.setAttribute(Qt::WA_NoSystemBackground);
     viewer.viewport()->setAttribute(Qt::WA_OpaquePaintEvent);

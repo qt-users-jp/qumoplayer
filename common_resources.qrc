@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/qumoplayer/image/qumoplayer.png</file>
+        <file>qml/qumoplayer/image/subsonic.png</file>
+        <file>qml/qumoplayer/common/AbstractMusicDirectoryModel.qml</file>
+        <file>qml/qumoplayer/common/AbstractSubsonicListModel.qml</file>
+        <file>qml/qumoplayer/common/CurrentPlaylistModel.qml</file>
+        <file>qml/qumoplayer/common/js/base64.js</file>
+        <file>qml/qumoplayer/common/js/subsonic.js</file>
+        <file>qml/qumoplayer/common/LibraryModel.qml</file>
+        <file>qml/qumoplayer/common/MusicDirectoryModel.qml</file>
+        <file>qml/qumoplayer/common/Ping.qml</file>
+        <file>qml/qumoplayer/common/PlaylistModel.qml</file>
+        <file>qml/qumoplayer/common/PlaylistsModel.qml</file>
+        <file>qml/qumoplayer/common/PodcastsModel.qml</file>
+        <file>qml/qumoplayer/common/SearchModel.qml</file>
+        <file>qml/qumoplayer/common/ServerListModel.qml</file>
+    </qresource>
+</RCC>
