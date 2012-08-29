@@ -17,6 +17,59 @@ AbstractPage {
 
     property variant indicesShuffled: []
 
+    Connections {
+        target: currentPlaylistView
+        onCurrentIndexChanged: {
+            checkSongIndex()
+        }
+    }
+
+    Connections {
+        target: player
+        onRepeatedChanged: {
+            checkSongIndex()
+        }
+        onShuffledChanged: {
+            checkSongIndex()
+        }
+    }
+
+    function checkSongIndex() {
+        if (!player.repeated) {
+            var first
+            var last
+
+            if (player.shuffled) {
+                first = root.indicesShuffled[0]
+                last = root.indicesShuffled[root.indicesShuffled.length - 1]
+            } else {
+                first = 0
+                last = currentPlaylistView.count -1
+            }
+
+            switch(currentPlaylistView.currentIndex) {
+            case first: {
+                player.atFirst = true
+                player.atLast = false
+                break
+            }
+            case last: {
+                player.atFirst = false
+                player.atLast = true
+                break
+            }
+            default: {
+                player.atFirst = false
+                player.atLast = false
+                break
+            }
+            }
+        } else {
+            player.atFirst = false
+            player.atLast = false
+        }
+    }
+
     Flipable {
         id: flipable
         front: playerFace
@@ -202,7 +255,10 @@ AbstractPage {
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         ToolIcon {
+                            id: playPreviousSong
                             iconId: "toolbar-mediacontrol-previous"
+                            enabled: !player.atFirst
+                            opacity: enabled ? 1.0 : 0.5
                             onClicked: player.playPrevious()
                         }
 
@@ -227,7 +283,10 @@ AbstractPage {
                             ]
                         }
                         ToolIcon {
+                            id: playNextSong
                             iconId: "toolbar-mediacontrol-next"
+                            enabled: !player.atLast
+                            opacity: enabled ? 1.0 : 0.5
                             onClicked: player.playNext()
                         }
                     }
@@ -333,6 +392,8 @@ AbstractPage {
         id: player
         property bool shuffled: false
         property bool repeated: false
+        property bool atFirst: true
+        property bool atLast: false
 
         property int secondsPosition: Math.floor(player.position / 1000)
         property bool tictac: false
@@ -341,7 +402,7 @@ AbstractPage {
             if (player.shuffled) {
                 var index = root.indicesShuffled.indexOf(currentPlaylistView.currentIndex)
                 if (index !== root.indicesShuffled.length - 1) {
-                    currentPlaylistView.currentIndex = root.indicesShuffled[index+1]
+                    currentPlaylistView.currentIndex = root.indicesShuffled[index + 1]
                     playaudio(currentPlaylistView.currentIndex, true, 0);
                 } else if (player.repeated) {
                     currentPlaylistView.currentIndex = root.indicesShuffled[0]
