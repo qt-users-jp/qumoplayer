@@ -17,57 +17,43 @@ AbstractPage {
 
     property variant indicesShuffled: []
 
-    Connections {
-        target: currentPlaylistView
-        onCurrentIndexChanged: {
-            checkSongIndex()
+    onStatusChanged: {
+        switch(status) {
+        case PageStatus.Activating: {
+            flipable.flipped = false;
+            break;
+        }
+        case PageStatus.Active: {
+            if(currentPlaylistModel.count !== 0 && currentPlaylistView.currentIndex < 0) {
+                playaudio(0, false, 0);
+                break;
+            }
+        }
         }
     }
 
-    Connections {
-        target: player
-        onRepeatedChanged: {
-            checkSongIndex()
-        }
-        onShuffledChanged: {
-            checkSongIndex()
-        }
-    }
-
-    function checkSongIndex() {
-        if (!player.repeated) {
-            var first
-            var last
-
-            if (player.shuffled) {
-                first = root.indicesShuffled[0]
-                last = root.indicesShuffled[root.indicesShuffled.length - 1]
+    function playaudio(index, play, offset) {
+        currentPlaylistView.currentIndex = index
+        if (index > -1) {
+            var song = currentPlaylistModel.get(currentPlaylistView.currentIndex)
+            if (typeof song.streamId !== 'undefined' && song.streamId.length > 0) {
+                player.source = Subsonic.getStreamSongUrl(song.streamId, "128", "mp3", offset)
             } else {
-                first = 0
-                last = currentPlaylistView.count -1
+                player.source = Subsonic.getStreamSongUrl(song.id, "128", "mp3", offset)
             }
-
-            switch(currentPlaylistView.currentIndex) {
-            case first: {
-                player.atFirst = true
-                player.atLast = false
-                break
-            }
-            case last: {
-                player.atFirst = false
-                player.atLast = true
-                break
-            }
-            default: {
-                player.atFirst = false
-                player.atLast = false
-                break
-            }
-            }
-        } else {
-            player.atFirst = false
-            player.atLast = false
         }
+        if (play) { player.play() } else { player.stop() }
+    }
+
+    function convertTime(sec) {
+        var minutes = Math.floor(sec / 60)
+        var seconds = Math.floor(sec - minutes * 60 )
+        return (minutes < 10 ? '0'.concat(minutes) : minutes).concat(':').concat(seconds < 10 ? '0'.concat(seconds) : seconds)
+    }
+
+    Connections {
+        target: currentPlaylistModel
+        onCountChanged: player.shuffle()
     }
 
     Flipable {
@@ -305,8 +291,8 @@ AbstractPage {
                 color: 'darkorange'
                 opacity: 0.5
             }
-
             clip: true
+            onCurrentIndexChanged: player.checkSongIndex()
         }
 
         Component {
@@ -367,25 +353,6 @@ AbstractPage {
                 }
             }
         }
-    }
-
-    InfoBanner {
-        id: infoBanner
-        iconSource: handleIconSource("bootloader-warning")
-        topMargin: 80
-        text: "Error: " + player.errorString
-        timerEnabled: false
-        //timerShowTime: 3000
-    }
-
-    Connections {
-        target: currentPlaylistModel
-        onCountChanged: player.shuffle()
-    }
-
-    Connections {
-        target: player
-        onSecondsPositionChanged: { player.tictac = true }
     }
 
     Audio {
@@ -455,7 +422,45 @@ AbstractPage {
             }
         }
 
-        onShuffledChanged: player.shuffle()
+        function checkSongIndex() {
+            if (!player.repeated) {
+                var first
+                var last
+
+                if (player.shuffled) {
+                    first = root.indicesShuffled[0]
+                    last = root.indicesShuffled[root.indicesShuffled.length - 1]
+                } else {
+                    first = 0
+                    last = currentPlaylistView.count -1
+                }
+
+                switch(currentPlaylistView.currentIndex) {
+                case first: {
+                    player.atFirst = true
+                    player.atLast = false
+                    break
+                }
+                case last: {
+                    player.atFirst = false
+                    player.atLast = true
+                    break
+                }
+                default: {
+                    player.atFirst = false
+                    player.atLast = false
+                    break
+                }
+                }
+            } else {
+                player.atFirst = false
+                player.atLast = false
+            }
+        }
+
+        onShuffledChanged: { player.shuffle(); player.checkSongIndex() }
+        onRepeatedChanged: player.checkSongIndex()
+        onSecondsPositionChanged: player.tictac = true
 
         onStatusChanged: {
             switch(status) {
@@ -507,25 +512,6 @@ AbstractPage {
             }
         }
         Component.onCompleted: pause();
-    }
-
-    function playaudio(index, play, offset) {
-        currentPlaylistView.currentIndex = index
-        if (index > -1) {
-            var song = currentPlaylistModel.get(currentPlaylistView.currentIndex)
-            if (typeof song.streamId !== 'undefined' && song.streamId.length > 0) {
-                player.source = Subsonic.getStreamSongUrl(song.streamId, "128", "mp3", offset)
-            } else {
-                player.source = Subsonic.getStreamSongUrl(song.id, "128", "mp3", offset)
-            }
-        }
-        if (play) { player.play() } else { player.stop() }
-    }
-
-    function convertTime(sec) {
-        var minutes = Math.floor(sec / 60)
-        var seconds = Math.floor(sec - minutes * 60 )
-        return (minutes < 10 ? '0'.concat(minutes) : minutes).concat(':').concat(seconds < 10 ? '0'.concat(seconds) : seconds)
     }
 
     StateGroup {
@@ -630,6 +616,15 @@ AbstractPage {
         }
     }
 
+    InfoBanner {
+        id: infoBanner
+        iconSource: handleIconSource("bootloader-warning")
+        topMargin: 80
+        text: "Error: " + player.errorString
+        timerEnabled: false
+        //timerShowTime: 3000
+    }
+
     Dialog {
         id: savePlaylistDialog
         visualParent: pageStack
@@ -637,20 +632,5 @@ AbstractPage {
         content: Item { width: parent.width; height: 100; anchors.horizontalCenter: parent.horizontalCenter; Text { id: listnametext; font.pointSize: 16; color: "white"; text: "Playlist name:"; } TextField { id: listname; anchors { top:listnametext.bottom; topMargin: 5; left: parent.left; right: parent.right } } }
         buttons: Row { spacing: 10; anchors.horizontalCenter: parent.horizontalCenter; Button { width: 120; text: "save"; onClicked: savePlaylistDialog.accept();} Button { width: 120; text: "cancel"; onClicked: savePlaylistDialog.reject(); } }
         onAccepted: Subsonic.createPlayList(listname.text, currentPlaylistModel, function(ret){console.debug(ret)});
-    }
-
-    onStatusChanged: {
-        switch(status) {
-        case PageStatus.Activating: {
-            flipable.flipped = false;
-            break;
-        }
-        case PageStatus.Active: {
-            if(currentPlaylistModel.count !== 0 && currentPlaylistView.currentIndex < 0) {
-                playaudio(0, false, 0);
-                break;
-            }
-        }
-        }
     }
 }
