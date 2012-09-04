@@ -46,9 +46,7 @@ AbstractPage {
     }
 
     function convertTime(sec) {
-        var minutes = Math.floor(sec / 60)
-        var seconds = Math.floor(sec - minutes * 60 )
-        return (minutes < 10 ? '0'.concat(minutes) : minutes).concat(':').concat(seconds < 10 ? '0'.concat(seconds) : seconds)
+        return Qt.formatTime(new Date(0, 0, 0, 0, 0, sec), 'mm:ss')
     }
 
     Connections {
