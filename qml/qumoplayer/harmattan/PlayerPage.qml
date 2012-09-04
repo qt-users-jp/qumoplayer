@@ -182,23 +182,9 @@ AbstractPage {
                             id: position
                             width: parent.width / 2
                             horizontalAlignment: Text.AlignLeft
-                            text: convertTime(0)
+                            text: convertTime(player.secondsPosition)
                             color: "white"
                             font.pointSize: 13
-
-                            states: [
-                                State {
-                                    when: player.tictac
-                                    PropertyChanges {
-                                        target: position
-                                        text: convertTime(player.secondsPosition)
-                                    }
-                                    PropertyChanges {
-                                        target: player
-                                        tictac: false
-                                    }
-                                }
-                            ]
                         }
 
                         Text {
@@ -217,7 +203,7 @@ AbstractPage {
                         width: timeRow.width
                         anchors.horizontalCenter: parent.horizontalCenter
                         minimumValue: 0
-                        value: player.position
+                        value: player.secondsPosition * 1000
                     }
 
                     Row {
@@ -253,8 +239,7 @@ AbstractPage {
                                 if (state == 'playing') {
                                     player.pause();
                                 } else {
-                                    console.debug("current position is ".concat(player.position))
-                                    Subsonic.ping(playaudio(currentPlaylistView.currentIndex, true, Math.floor(player.secondsPosition)))
+                                    player.paused = false
                                 }
                             }
 
@@ -290,7 +275,7 @@ AbstractPage {
                 opacity: 0.5
             }
             clip: true
-            onCurrentIndexChanged: player.checkSongIndex()
+            onCurrentIndexChanged: { player.checkSongIndex() }
         }
 
         Component {
@@ -361,7 +346,6 @@ AbstractPage {
         property bool atLast: false
 
         property int secondsPosition: Math.floor(player.position / 1000)
-        property bool tictac: false
 
         function playNext() {
             if (player.shuffled) {
@@ -458,7 +442,6 @@ AbstractPage {
 
         onShuffledChanged: { player.shuffle(); player.checkSongIndex() }
         onRepeatedChanged: player.checkSongIndex()
-        onSecondsPositionChanged: player.tictac = true
 
         onStatusChanged: {
             switch(status) {
