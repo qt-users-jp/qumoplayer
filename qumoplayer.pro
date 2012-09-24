@@ -6,6 +6,8 @@ qml/qumoplayer/image/qumoplayer-splash-landscape.png
 folder_01.target = image
 DEPLOYMENTFOLDERS = folder_01
 
+include(component/component.pri)
+
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
@@ -96,7 +98,11 @@ OTHER_FILES += \
     qml/qumoplayer/common/LibraryModel.qml \
     qml/qumoplayer/common/CurrentPlaylistModel.qml \
     qml/qumoplayer/common/AbstractSubsonicListModel.qml \
-    qml/qumoplayer/common/AbstractMusicDirectoryModel.qml
+    qml/qumoplayer/common/AbstractMusicDirectoryModel.qml \
+    qml/qumoplayer/inneractive/AdItem.qml \
+    qml/qumoplayer/inneractive/AdParameters.qml \
+    qml/qumoplayer/inneractive/adFunctions.js \
+    qml/qumoplayer/harmattan/Ad.qml \
 
 RESOURCES += \
     common_resources.qrc

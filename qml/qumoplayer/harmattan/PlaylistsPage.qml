@@ -29,7 +29,7 @@ AbstractTabLoadablePage {
     AbstractListView {
         id: playlistsView
         anchors.fill: parent
-        anchors.bottomMargin: root.footerHeight
+        anchors.bottomMargin: root.footerWithAdHeight
 
         model: playlistsModel
         delegate: playlistsDelegate

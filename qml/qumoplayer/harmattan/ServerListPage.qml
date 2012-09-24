@@ -10,7 +10,7 @@ AbstractPage {
         id: view
         anchors.fill: parent
         anchors.topMargin: root.headerHeight
-        anchors.bottomMargin: root.footerHeight
+        anchors.bottomMargin: root.footerWithAdHeight
 
         model: serverListModel
         delegate: AbstractTwoLinesDelegate {

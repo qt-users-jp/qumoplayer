@@ -89,7 +89,7 @@ AbstractTabLoadablePage {
 
     ToolIcon {
         id: searchButton
-        anchors { bottom: parent.bottom; right: parent.right; bottomMargin: root.footerHeight }
+        anchors { bottom: parent.bottom; right: parent.right; bottomMargin: root.footerWithAdHeight }
         enabled: searchField.text.length > 0
         platformIconId: "toolbar-search"
         onClicked: search()

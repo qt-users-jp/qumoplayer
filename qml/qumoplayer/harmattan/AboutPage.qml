@@ -11,7 +11,7 @@ AbstractPage {
         id: flickable
         anchors.fill: parent
         anchors.topMargin: root.headerHeight
-        anchors.bottomMargin: root.footerHeight
+        anchors.bottomMargin: root.footerWithAdHeight
         clip: true
 
         contentWidth: container.width
@@ -20,32 +20,33 @@ AbstractPage {
         Column {
             id: container
             width: flickable.width
-            anchors.top: parent.top
-            anchors.topMargin: 30
 
-            Column {
-                width: parent.width
-                height: 240
-                spacing: 50
+            Item {
+                width: 180
+                height: width
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 Image {
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.centerIn: parent
                     height: 128
                     width: height
-                    fillMode: Image.PreserveAspectFit
                     smooth: true
                     source: '../image/qumoplayer.png'
                 }
+            }
 
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTr('<a style="%1;text-decoration:none;", href="http://dev.qtquick.me/projects/qumoplayer/">QumoPlayer </a>').arg('color: darkorange').concat('v0.0.1');
-                    color: 'white'
-                    font.family: "Nokia Pure Text"
-                    font.pointSize: 24
-                    onLinkActivated: Qt.openUrlExternally(link)
-                }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr('<a style="%1;text-decoration:none;", href="http://dev.qtquick.me/projects/qumoplayer/">QumoPlayer </a>').arg('color: darkorange').concat('v0.0.1');
+                color: 'white'
+                font.family: "Nokia Pure Text"
+                font.pointSize: 24
+                onLinkActivated: Qt.openUrlExternally(link)
+            }
 
+            Item {
+                width: container.width
+                height: 15
             }
 
             AbstractSectionDelegate {

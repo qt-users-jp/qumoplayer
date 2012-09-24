@@ -6,6 +6,7 @@ Page {
 
     property string title
     property int footerHeight: 70
+    property int footerWithAdHeight: footerHeight + ad.height
 
     property bool loadable: false
     property bool loading: false

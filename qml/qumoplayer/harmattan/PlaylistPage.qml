@@ -58,7 +58,7 @@ AbstractLoadablePage {
         id: playlistView
         anchors.fill: parent
         anchors.topMargin: root.headerHeight
-        anchors.bottomMargin: root.footerHeight
+        anchors.bottomMargin: root.footerWithAdHeight
         model: playlistModel
         delegate: playlistDelegate
         clip: true

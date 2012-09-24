@@ -77,5 +77,11 @@ PageStackWindow {
     Component { id: preferencesPage; PreferencesPage {} }
     Component { id: aboutPage; AboutPage {} }
 
+    Ad {
+        id: ad
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: mainPage.footerHeight
+    }
+
     Binding { target: theme; property: 'inverted'; value: true }
 }

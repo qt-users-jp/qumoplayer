@@ -11,7 +11,7 @@ AbstractPage {
         id: flickable
         anchors.fill: parent
         anchors.topMargin: root.headerHeight
-        anchors.bottomMargin: root.footerHeight
+        anchors.bottomMargin: root.footerWithAdHeight
         clip: true
 
         contentWidth: container.width

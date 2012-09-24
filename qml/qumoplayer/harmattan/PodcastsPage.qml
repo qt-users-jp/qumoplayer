@@ -57,7 +57,7 @@ AbstractTabLoadablePage {
     AbstractListView {
         id: podcastsView
         anchors.fill: parent
-        anchors.bottomMargin: root.footerHeight
+        anchors.bottomMargin: root.footerWithAdHeight
 
         model: podcastsModel
         delegate: podcastsDelegate

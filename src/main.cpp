@@ -7,6 +7,7 @@
 #include <QtDeclarative/qdeclarative.h>
 #include "qmlapplicationviewer.h"
 #include "qplatformdefs.h"
+#include <inneractiveplugin.h>
 
 class QumoPlayerTest : public QObject
 {
@@ -34,6 +35,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QApplication> app(createApplication(argc, argv));
 
     QmlApplicationViewer viewer;
+    inneractivePlugin::initializeEngine(viewer.engine());
 
     QString mainFile;
 #if defined(Q_OS_SYMBIAN) || defined(Q_WS_SIMULATOR)

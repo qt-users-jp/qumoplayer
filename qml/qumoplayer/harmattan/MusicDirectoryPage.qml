@@ -88,7 +88,7 @@ AbstractLoadablePage {
         id: musicDirectoryView
         anchors.fill: parent
         anchors.topMargin: root.headerHeight
-        anchors.bottomMargin: root.footerHeight
+        anchors.bottomMargin: root.footerWithAdHeight
 
         model: musicDirectoryModel
         delegate: musicDirectoryDelegate
