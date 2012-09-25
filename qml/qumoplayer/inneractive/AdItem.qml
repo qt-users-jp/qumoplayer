@@ -49,12 +49,6 @@ Item {
       */
     property alias adImageUrl: adImage.source
     /*!
-      Added by kenya888.
-      Image status
-      Read-only
-      */
-    property alias adImageStatus: adImage.status
-    /*!
       Url which is opened when user clicks ad.
       Read-only
       */
