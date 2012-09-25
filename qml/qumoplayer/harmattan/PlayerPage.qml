@@ -21,14 +21,23 @@ AbstractPage {
         switch(status) {
         case PageStatus.Activating: {
             flipable.flipped = false;
-            break;
+            break
         }
         case PageStatus.Active: {
             if(currentPlaylistModel.count !== 0 && currentPlaylistView.currentIndex < 0) {
                 playaudio(0, false, 0);
-                break;
             }
+            break
         }
+        }
+    }
+
+    Connections {
+        target: currentPlaylistView
+        onAdd: {
+            if(currentPlaylistView.count == 1) {
+                playaudio(0, false, 0)
+            }
         }
     }
 
@@ -239,7 +248,11 @@ AbstractPage {
                                 if (state == 'playing') {
                                     player.pause();
                                 } else {
-                                    player.paused = false
+                                    if(player.paused) {
+                                        player.paused = !player.paused
+                                    } else {
+                                        playaudio(currentPlaylistView.currentIndex, true, 0)
+                                    }
                                 }
                             }
 
