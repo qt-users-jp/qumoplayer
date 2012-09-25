@@ -37,7 +37,7 @@ AbstractPage {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr('<a style="%1;text-decoration:none;", href="http://dev.qtquick.me/projects/qumoplayer/">QumoPlayer </a>').arg('color: darkorange').concat('v0.0.1');
+                text: qsTr('<a style="%1;text-decoration:none;", href="http://dev.qtquick.me/projects/qumoplayer/">QumoPlayer for N9 v%2</a>').arg('color: darkorange').arg(currentVersion.version)
                 color: 'white'
                 font.family: "Nokia Pure Text"
                 font.pointSize: 24

@@ -103,6 +103,7 @@ OTHER_FILES += \
     qml/qumoplayer/inneractive/AdParameters.qml \
     qml/qumoplayer/inneractive/adFunctions.js \
     qml/qumoplayer/harmattan/Ad.qml \
+    qml/qumoplayer/harmattan/Components/CurrentVersion.qml
 
 RESOURCES += \
     common_resources.qrc

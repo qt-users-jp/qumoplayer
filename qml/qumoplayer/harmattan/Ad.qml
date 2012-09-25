@@ -4,8 +4,18 @@ import "../inneractive"
 Item {
     id: root
     width: 350
-    height: visible ? 70 : 0
+    height: currentVersion.trusted ? 0 : 70
+    opacity: currentVersion.trusted ? 0 : 1
     anchors.horizontalCenter: parent.horizontalCenter
+
+    Connections {
+        target: currentVersion
+        onTrustedChanged: {
+            if(currentVersion.trusted) {
+                root.destroy()
+            }
+        }
+    }
 
     AdItem {
         id: adItem

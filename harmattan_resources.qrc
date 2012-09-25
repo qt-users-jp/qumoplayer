@@ -34,5 +34,6 @@
         <file>qml/qumoplayer/inneractive/adFunctions.js</file>
         <file>qml/qumoplayer/inneractive/AdItem.qml</file>
         <file>qml/qumoplayer/inneractive/AdParameters.qml</file>
+        <file>qml/qumoplayer/harmattan/Components/CurrentVersion.qml</file>
     </qresource>
 </RCC>

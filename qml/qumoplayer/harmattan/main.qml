@@ -83,5 +83,11 @@ PageStackWindow {
         anchors.bottomMargin: mainPage.footerHeight
     }
 
+    CurrentVersion {
+        id: currentVersion
+        version: globalSettings.readData('System/Version')
+        onVersionChanged: globalSettings.saveData('System/Version', version)
+    }
+
     Binding { target: theme; property: 'inverted'; value: true }
 }
