@@ -167,7 +167,25 @@ AbstractPage {
                     height: 300
                     fillMode: Image.PreserveAspectFit
                     smooth: true
+                    opacity: 0
+
+                    states: [
+                        State {
+                            name: "loaded"
+                            when: playerimg.status == Image.Ready
+                            PropertyChanges {
+                                target: playerimg
+                                opacity: 1
+                            }
+                        }
+                    ]
+                    transitions: [
+                            Transition {
+                                NumberAnimation { property: 'opacity'; duration: 250; alwaysRunToEnd: true }
+                            }
+                    ]
                 }
+
             }
 
             Item {

@@ -43,6 +43,23 @@ MouseArea {
         width: height
         fillMode: Image.PreserveAspectFit
         smooth: true
+        opacity: 0
+
+        states: [
+            State {
+                name: "loaded"
+                when: icon.status == Image.Ready
+                PropertyChanges {
+                    target: icon
+                    opacity: 1
+                }
+            }
+        ]
+        transitions: [
+                Transition {
+                    NumberAnimation { property: 'opacity'; duration: 250; alwaysRunToEnd: true }
+                }
+        ]
     }
 
     Separator { anchors.left: parent.left; anchors.right: parent.right; anchors.bottom: parent.bottom }
