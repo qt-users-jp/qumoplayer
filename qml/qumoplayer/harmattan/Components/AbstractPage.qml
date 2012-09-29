@@ -34,7 +34,7 @@ Page {
 
     property int headerHeight: header.y + header.height
     property int footerHeight: footer.height * footerOpacity
-    property int footerWithAdHeight: footerHeight + ad.height
+    property int footerWithAdHeight: footerHeight + adArea.height
     property alias toolBarLayout: footer.tools
     property alias footerOpacity: footer.opacity
 

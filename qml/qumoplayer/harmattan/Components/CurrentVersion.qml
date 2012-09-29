@@ -3,7 +3,7 @@ import QtQuick 1.1
 QtObject {
     id: root
     property string version
-    property bool trusted: false
+    property bool trusted: true
 
     property Timer timer: Timer {
         running: true

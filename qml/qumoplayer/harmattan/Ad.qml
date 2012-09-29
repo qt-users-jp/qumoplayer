@@ -27,35 +27,18 @@
 import QtQuick 1.1
 import "../inneractive"
 
-Item {
+AdItem {
     id: root
-    width: 350
-    height: currentVersion.trusted ? 0 : 70
-    opacity: currentVersion.trusted ? 0 : 1
-    anchors.horizontalCenter: parent.horizontalCenter
+    anchors { fill: parent; leftMargin: 5; rightMargin: 5 }
 
-    Connections {
-        target: currentVersion
-        onTrustedChanged: {
-            if(currentVersion.trusted) {
-                root.destroy()
-            }
-        }
+    parameters: AdParameters {
+        applicationId: "personal_QumoPlayer_Nokia"
     }
 
-    AdItem {
-        id: adItem
-        parameters: AdParameters {
-            applicationId: "personal_QumoPlayer_Nokia"
-        }
-        showText: false
-        scaleAd: true
-        anchors.fill: parent
-        anchors.topMargin: 5
-        anchors.bottomMargin: 5
-        reloadInterval: 60
-        retryOnError: true
-    }
+    showText: false
+    scaleAd: true
+    reloadInterval: 60
+    retryOnError: true
 
     states: [
         State {
@@ -72,4 +55,13 @@ Item {
             NumberAnimation { property: 'opacity'; duration: 500; alwaysRunToEnd: true }
         }
     ]
+
+    Connections {
+        target: currentVersion
+        onTrustedChanged: {
+            if(currentVersion.trusted) {
+                root.destroy()
+            }
+        }
+    }
 }

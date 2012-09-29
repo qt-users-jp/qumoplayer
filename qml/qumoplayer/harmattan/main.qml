@@ -102,17 +102,41 @@ PageStackWindow {
     Component { id: serverListPage; ServerListPage {} }
     Component { id: preferencesPage; PreferencesPage {} }
     Component { id: aboutPage; AboutPage {} }
+    Component { id: ad; Ad { parent: adArea } }
 
-    Ad {
-        id: ad
+    Loader { id: adLoader }
+
+    Item {
+        id: adArea
+        width: 350
+        height: currentVersion.trusted ? 0 : 70
+        opacity: currentVersion.trusted ? 0 : 1
         anchors.bottom: parent.bottom
         anchors.bottomMargin: mainPage.footerHeight
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     CurrentVersion {
         id: currentVersion
         version: globalSettings.readData('System/Version')
         onVersionChanged: globalSettings.saveData('System/Version', version)
+        onTrustedChanged: {
+            if(!trusted) {
+                acceptAdDialog.open()
+            }
+        }
+    }
+
+    QueryDialog {
+        id: acceptAdDialog
+        icon: persistentHandleIconSource('bootloader-warning')
+        titleText: qsTr('Attention!!')
+        message: qsTr('QumoPlayer free version uses in-app advertising system by <a style="%1;text-decoration:none;", href="http://inner-active.com">Inner-Active</a> and it sends the **IMEI** of your device to them. If you won\'t permit this, exit and please consider to use commercial version from Ovi Store.').arg('color: darkorange')
+        acceptButtonText: qsTr('Accept')
+        rejectButtonText: qsTr('Exit')
+        onRejected: Qt.quit()
+        onAccepted: adLoader.sourceComponent = ad
+        onLinkActivated: Qt.openUrlExternally(link)
     }
 
     Binding { target: theme; property: 'inverted'; value: true }
