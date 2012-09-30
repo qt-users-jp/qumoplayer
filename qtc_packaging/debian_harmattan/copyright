@@ -1,17 +1,15 @@
-This package was debianized by unknown <kenya888@unknown> on
+This package was debianized by Takahiro Hashimoto <kenya888@qtquick.me> on
 Tue, 10 Jan 2012 10:44:36 +0900.
 
 It was downloaded from <url://example.com>
 
 Upstream Author(s):
 
-    <put author's name and email here>
-    <likewise for another author>
+    Takahiro Hashimoto <kenya888@qtquick.me>
 
 Copyright:
 
-    <Copyright (C) YYYY Name OfAuthor>
-    <likewise for another author>
+    Copyright (C) 2012 QumoPlayer Project
 
 License:
 
@@ -32,7 +30,7 @@ License:
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
 
-The Debian packaging is (C) 2012, unknown <kenya888@unknown> and
+The Debian packaging is (C) 2012, Takahiro Hashimoto <kenya888@qtquick.me> and
 is licensed under the GPL, see above.
 
 
