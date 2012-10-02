@@ -26,7 +26,7 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import com.nokia.extras 1.1
+import com.nokia.extras 1.0
 import QtMultimediaKit 1.1
 import "../common/js/subsonic.js" as Subsonic
 import "../common" as Common
