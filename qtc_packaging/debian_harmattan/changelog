@@ -1,3 +1,8 @@
+qumoplayer (0.1.1) unstable; urgency=low
+  * http://dev.qtquick.me/versions/47
+
+ -- Takahiro Hashimoto <kenya888@qtquick.me>  Tue, 02 Oct 2012 17:01:47 +0900
+
 qumoplayer (0.1.0) unstable; urgency=low
   * Initial Release.
   * http://dev.qtquick.me/versions/32
